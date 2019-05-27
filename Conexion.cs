@@ -4,50 +4,44 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
+using System.Data;
 
 namespace AppProyectoBD
 {
-    class Conexion
+    public class Conexion
     {
         private MySqlConnection conect;
         private MySqlCommand codigo;
         private MySqlDataReader leer;
+        private String permisos;
+        private String sesFi;
+        private String admin = "FFFF";
 
-        /*public Conexion()
+        public Conexion(MySqlConnection conect)
         {
-            conect = new MySqlConnection("server=localhost;database=EditorialPiedra;Uid=root;pwd=1016;");
+            this.conect = conect;
             conect.Open();
-            codigo = new MySqlCommand
-            {
-                Connection = conect
-            };
-        }*///}
-
-        public MySqlConnection Conect
-        {
-            get {
-                conect = new MySqlConnection("server=localhost;database=EditorialPiedra;Uid=root;pwd=334920179;");
-                conect.Open();
-                return conect; }
-        }
-        //}
-        /*
-         * ----------------Este funciona-------------------------
-        public MySqlConnection Conect()
-        {
-            MySqlConnection conec = new MySqlConnection("server=localhost;database=EditorialPiedra;Uid=root;pwd=1016;");
-            conec.Open();
-            return conec;
-        }
-
-        public MySqlDataReader Comando(String com)
-        {
-            MySqlCommand codigo = new MySqlCommand(String.Format(com), Conect());
+            codigo = new MySqlCommand("SELECT MAX(ses_fin) FROM Sesiones;", conect);
             leer = codigo.ExecuteReader();
-            return leer;
-        }* //-----------------------------------------------------
-    
-     */
+            if(leer.Read())
+                sesFi = leer.GetString(0);
+        }
+        public String administrador
+        {
+            get { return admin; }
+        }
+
+        public String permiso
+        {
+            get { return permisos; }
+            set { permisos = value; }
+        }
+
+        public String ultSesion
+        {
+            get { return sesFi; }
+        }
+
         public bool LeerRead
         {
             get { return leer.Read(); }
@@ -57,13 +51,14 @@ namespace AppProyectoBD
             get { return leer; }
         }
         public void Cerrar()
-        {
+        {    
             conect.Close();
         }
         public void Comando(String com)
         {
-            codigo =  new MySqlCommand((com),Conect);
-            leer = codigo.ExecuteReader();
+            codigo =  new MySqlCommand((com),conect);
+            leer.Close();
+            leer = codigo.ExecuteReader();          
         }
        
 
