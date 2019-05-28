@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 using AppProyectoBD;
-using ImageMagick;
 
 namespace PruebaA
 {
@@ -205,7 +204,7 @@ namespace PruebaA
             {
                 IdEmp = 0;
             }
-            string destino = "D:\\SISTEMAS\\Base de datos Editorial\\Imagenes\\imagen"+(IdEmp+1)+".jpeg";
+            string destino = Path.Combine("C:\\Imagenes\\","imagen"+(IdEmp+1)+".jpeg").Replace(@"\", @"\\");
 
             //CASO 1: TENER LOS DATOS
             if (textos && telefonos && redes && worksL)
