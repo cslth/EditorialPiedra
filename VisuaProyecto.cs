@@ -14,22 +14,26 @@ namespace AppProyectoBD
     public partial class VisuaProyecto : Form
     {
         int sel, IDPro;
-        //Proyectos pro;
-        public VisuaProyecto(int id, int elem)
+        Conexion co;
+        public bool confirmacion;
+        public VisuaProyecto(Conexion co,int id, int elem)
         {
             InitializeComponent();
+            Region = Funciones.redondear(Width, Height);
+
+            this.co = co;
+            //Ajusto el formato de los datetimePicker
+            dateTimePicker1.Format = DateTimePickerFormat.Custom;
+            dateTimePicker1.CustomFormat = "dd/MM/yyyy";
+            dateTimePicker2.Format = DateTimePickerFormat.Custom;
+            dateTimePicker2.CustomFormat = "dd/MM/yyyy";
             this.StartPosition = FormStartPosition.CenterScreen;
+            //Opcion seleccionada
             sel = elem;
+            //Proyecto seleccionado
             IDPro = id;
-            //pro = f1;
-            
-
-            //Abro conexion con el servidor
-            MySqlConnection conect = new MySqlConnection("server=localhost;database=EditorialPiedra;Uid=root;pwd=334920179;");
-            conect.Open();
-            MySqlCommand codigo = new MySqlCommand();
-            codigo.Connection = conect;
-
+            //Incializo la confirmacion de eliminacion
+            confirmacion = false;
             //Habilito botones dependiendo de la opcion de la ventana
             //Si se esta visualizando un proyecto
             if (elem == 1)
@@ -45,27 +49,31 @@ namespace AppProyectoBD
                 richTextBox1.Enabled = false;
 
                 //----------------------Muestro la info del proyecto seleccionado--------------------------
-                codigo.CommandText = ("SELECT * FROM Proyectos WHERE ID ="+id);
-                MySqlDataReader leer = codigo.ExecuteReader();
+                co.Comando("SELECT * FROM Proyectos WHERE ID ="+id);
+                if (co.LeerRead)
+                {
+                    nombre.Text = co.Leer.GetString(1);
+                    richTextBox1.Text = co.Leer.GetString(2);
+                    dateTimePicker1.Value = co.Leer.GetDateTime(3);
+                    dateTimePicker2.Value = co.Leer.GetDateTime(4);
 
-                leer.Read();
-                nombre.Text = leer.GetString(1);
-                richTextBox1.Text = leer.GetString(2);
-
-                string fechaInicio = leer.GetString(3);
+                }
+                //----------------------- REVISAR EN LA COMPUTADORA DE JOSUE ----------------------------------------
+                
+                /*string fechaInicio = co.Leer.GetString(3);
                 string año = fechaInicio.Substring(6, 4);
                 string mes = fechaInicio.Substring(3, 2);
                 string dia = fechaInicio.Substring(0, 2);
-                dateTimePicker1.Value = new DateTime(Convert.ToInt32(año),Convert.ToInt32(mes),Convert.ToInt32(dia));
+                dateTimePicker1.Value = new DateTime(Convert.ToInt32(año),Convert.ToInt32(mes),Convert.ToInt32(dia));*/
 
-                string fechaFin = leer.GetString(4);
+                /*string fechaFin = co.Leer.GetString(4);
                 string año2 = fechaFin.Substring(6, 4);
                 string mes2 = fechaFin.Substring(3, 2);
                 string dia2 = fechaFin.Substring(0, 2);
-                dateTimePicker2.Value = new DateTime(Convert.ToInt32(año2), Convert.ToInt32(mes2), Convert.ToInt32(dia2));
+                dateTimePicker2.Value = new DateTime(Convert.ToInt32(año2), Convert.ToInt32(mes2), Convert.ToInt32(dia2));*/
 
                 List<String> Nombre = new List<String>();
-                Nombre.Add(leer.GetString(5));
+                Nombre.Add(co.Leer.GetString(5));
                 comboBox1.DataSource = Nombre;
                 
 
@@ -85,19 +93,29 @@ namespace AppProyectoBD
                 richTextBox1.Enabled = true;
 
                 //----------------------Mostrar empleados en comboBox--------------------------
-                codigo.CommandText = ("SELECT Nombre FROM Empleado");
-
-                MySqlDataReader leer = codigo.ExecuteReader();
+                co.Comando("SELECT Nombre FROM Empleado");
 
                 List<String> Nombres = new List<String>();
-                while (leer.Read())
+                while (co.LeerRead)
                 {
-                    String Nombre = leer.GetString(0);
+                    String Nombre = co.Leer.GetString(0);
                     Nombres.Add(Nombre);
                 }
                 comboBox1.DataSource = Nombres;
             }
-            conect.Close();
+        }
+
+        //Valido los datos del formulario para que no sean nulos
+        private bool Validacion()
+        {
+            if (nombre.Text.Equals("") || richTextBox1.Text.Equals(""))
+            {
+                MessageBox mens = new MessageBox("Complete el formulario", 12);
+                mens.ShowDialog();
+                return false;
+            }
+                
+            return true;
         }
 
         private void pbCerrar_Click(object sender, EventArgs e)
@@ -116,129 +134,107 @@ namespace AppProyectoBD
 
         private void button2_Click(object sender, EventArgs e)
         {
-            //Opcion editar 
-            butGuardar.Visible = true;
-            butEliminar.Visible = false;
-            butEditar.Visible = false;
-            nombre.Enabled = true;
-            dateTimePicker1.Enabled = true;
-            dateTimePicker2.Enabled = true;
-            comboBox1.Enabled = true;
-            richTextBox1.Enabled = true;
-
-            //---------------Mostramos todos los empleados en el comboBox si se da en editar--------------------------
-            MySqlConnection conect2 = new MySqlConnection("server=localhost;database=EditorialPiedra;Uid=root;pwd=1016;");
-            conect2.Open();
-            MySqlCommand codigo2 = new MySqlCommand();
-            codigo2.Connection = conect2;
-
-            List<String> Nombres = new List<String>();
-            string nombreSel = comboBox1.Text;
-            Nombres.Add(nombreSel);
-
-            codigo2.CommandText = ("SELECT Nombre FROM Empleado;");
-            MySqlDataReader leer2 = codigo2.ExecuteReader();
-
-            while (leer2.Read())
+            if (co.permiso.Equals(co.administrador))
             {
-                string nom = leer2.GetString(0);
-                if (nom != nombreSel)
-                    Nombres.Add(nom);
+                //Opcion editar 
+                butGuardar.Visible = true;
+                butEliminar.Visible = false;
+                butEditar.Visible = false;
+                nombre.Enabled = true;
+                dateTimePicker1.Enabled = true;
+                dateTimePicker2.Enabled = true;
+                comboBox1.Enabled = true;
+                richTextBox1.Enabled = true;
+
+                //---------------Mostramos todos los empleados en el comboBox si se da en editar--------------------------
+                List<String> Nombres = new List<String>();
+                string nombreSel = comboBox1.Text;
+                Nombres.Add(nombreSel);
+
+                co.Comando("SELECT Nombre FROM Empleado;");
+                while (co.LeerRead)
+                {
+                    string nom = co.Leer.GetString(0);
+                    if (nom != nombreSel)
+                        Nombres.Add(nom);
+                }
+                comboBox1.DataSource = Nombres;
+
             }
-            comboBox1.DataSource = Nombres;
-            conect2.Close();
-
-
+            else
+            {
+                AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No cuenta con los permisos para realizar esta acción", 1);
+                mens.ShowDialog();
+            }
         }
 
         private void butGuardar_Click(object sender, EventArgs e)
         {
-            //Opcion guardar si es desde visualizar
-            if (sel == 1)
+            if (Validacion())
             {
-                butGuardar.Visible = false;
-                butEliminar.Visible = true;
-                butEditar.Visible = true;
-                nombre.Enabled = false;
-                dateTimePicker1.Enabled = false;
-                dateTimePicker2.Enabled = false;
-                comboBox1.Enabled = false;
-                richTextBox1.Enabled = false;
+                //Opcion guardar si es desde visualizar
+                if (sel == 1)
+                {
+                    butGuardar.Visible = false;
+                    butEliminar.Visible = true;
+                    butEditar.Visible = true;
+                    nombre.Enabled = false;
+                    dateTimePicker1.Enabled = false;
+                    dateTimePicker2.Enabled = false;
+                    comboBox1.Enabled = false;
+                    richTextBox1.Enabled = false;
 
-                //----------------------Guaradr un proyecto editado------------------------------
-                MySqlConnection conect = new MySqlConnection("server=localhost;database=EditorialPiedra;Uid=root;pwd=1016;");
+                    //----------------------Guaradr un proyecto editado------------------------------
+                    /*string fechaInicio = dateTimePicker1.Text;
+                    string año = fechaInicio.Substring(6, 4);
+                    string mes = fechaInicio.Substring(2, 4);
+                    string dia = fechaInicio.Substring(0, 2);
+                    string fecha1 = año + mes + dia;*/
+                    string fecha1 = dateTimePicker1.Value.Date.ToString("yyyy-MM-dd");
 
-                conect.Open();
+                    /*string fechaFin = dateTimePicker2.Text;
+                    string año2 = fechaFin.Substring(6, 4);
+                    string mes2 = fechaFin.Substring(2, 4);
+                    string dia2 = fechaFin.Substring(0, 2);
+                    string fecha2 = año2 + mes2 + dia2;*/
+                    string fecha2 = dateTimePicker2.Value.Date.ToString("yyyy-MM-dd");
 
-                MySqlCommand codigo = new MySqlCommand();
+                    co.Comando("CALL PROCEDURE update_Proyectos(" + nombre.Text + "," + richTextBox1.Text + "," + fecha1 + "," + fecha2 + "," + comboBox1.Text + "," + IDPro + ");");
+                    //---------------------------------------------------------------------------------
+                }
+                //Opcion guardar si es desde agregar nuevo proyecto
+                else
+                {
 
-                codigo.Connection = conect;
+                    //----------------------Insertar datos en Proyectos--------------------------
+                    /*string fechaInicio = dateTimePicker1.Text;
+                    string año = fechaInicio.Substring(6, 4);
+                    string mes = fechaInicio.Substring(2, 4);
+                    string dia = fechaInicio.Substring(0, 2);
+                    string fecha1 = año + mes + dia;*/
+                    string fecha1 = dateTimePicker1.Value.Date.ToString("yyyy-MM-dd");
 
-                string fechaInicio = dateTimePicker1.Text;
-                string año = fechaInicio.Substring(6, 4);
-                string mes = fechaInicio.Substring(2, 4);
-                string dia = fechaInicio.Substring(0, 2);
-                string fecha1 = año + mes + dia;
+                    /*string fechaFin = dateTimePicker2.Text;
+                    string año2 = fechaFin.Substring(6, 4);
+                    string mes2 = fechaFin.Substring(2, 4);
+                    string dia2 = fechaFin.Substring(0, 2);
+                    string fecha2 = año2 + mes2 + dia2;*/
+                    string fecha2 = dateTimePicker2.Value.Date.ToString("yyyy-MM-dd");
 
-                string fechaFin = dateTimePicker2.Text;
-                string año2 = fechaFin.Substring(6, 4);
-                string mes2 = fechaFin.Substring(2, 4);
-                string dia2 = fechaFin.Substring(0, 2);
-                string fecha2 = año2 + mes2 + dia2;
+                    co.Comando("CALL PROCEDURE insert_Proyectos(" + nombre.Text + "," + richTextBox1.Text + "," + fecha1 + "," +
+																 fecha2 + "," + comboBox1.Text + ");");
 
-                codigo.CommandText = ("UPDATE Proyectos SET Nombre ='" + nombre.Text + "',Descripcion = '" + richTextBox1.Text + "',FechaInicio ='" + fecha1 + "',FechaFin ='" + fecha2 + "',Encargado ='" + comboBox1.Text + "'" +
-                                        "WHERE ID=" + IDPro + ";");
-                MySqlDataReader leer = codigo.ExecuteReader();
+                    //------------------------------------------------------------------------------
+                    Form message = new MessageBox("Guardado con exito", 12);
+                    message.ShowDialog();
+                    this.Close();
 
-                leer.Read();
-
-
-                conect.Close();
-                //---------------------------------------------------------------------------------
-            }
-            //Opcion guardar si es desde agregar nuevo proyecto
-            else
-            {
-                
-                //----------------------Insertar datos en Proyectos--------------------------
-                MySqlConnection conect = new MySqlConnection("server=localhost;database=EditorialPiedra;Uid=root;pwd=1016;");
-                conect.Open();
-
-                MySqlCommand codigo = new MySqlCommand();
-                MySqlConnection conect2 = new MySqlConnection();
-                codigo.Connection = conect;
-
-                string fechaInicio = dateTimePicker1.Text;
-                string año = fechaInicio.Substring(6, 4);
-                string mes = fechaInicio.Substring(2, 4);
-                string dia = fechaInicio.Substring(0, 2);
-                string fecha1 = año + mes + dia;
-
-                string fechaFin = dateTimePicker2.Text;
-                string año2 = fechaFin.Substring(6, 4);
-                string mes2 = fechaFin.Substring(2, 4);
-                string dia2 = fechaFin.Substring(0, 2);
-                string fecha2 = año2 + mes2 + dia2;
-
-                
-                codigo.CommandText = ("INSERT INTO Proyectos (Nombre,Descripcion,FechaInicio, FechaFin, Encargado ) " +
-                                     " VALUES('" + nombre.Text + "','" + richTextBox1.Text + "','"+fecha1+"'," +
-                                     "'"+fecha2+"','"+comboBox1.Text+"');");
-
-                MySqlDataReader leer = codigo.ExecuteReader();
-
-
-                conect.Close();
-                //------------------------------------------------------------------------------
-                Form message = new MessageBox("Guardado con exito");
-                message.ShowDialog();
-                this.Close();
+                }
             }
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
-            //pro.refrescar();
             this.Close();
             
         }
@@ -260,9 +256,20 @@ namespace AppProyectoBD
             if (frm2 != null)  //Si encuentra una instancia abierta
             {
                 frm2.DatosTablas();
+                this.Close();
             }
            
           
+        }
+
+        private void panel7_MouseDown(object sender, MouseEventArgs e)
+        {
+        }
+
+        private void label6_MouseDown(object sender, MouseEventArgs e)
+        {
+            Funciones.ReleaseCapture();
+            Funciones.SendMessage(this.Handle, 0x112, 0xf012, 0);
         }
 
 		private void panel1_Paint_1(object sender, PaintEventArgs e)
@@ -270,27 +277,39 @@ namespace AppProyectoBD
 
 		}
 
-		private void panel1_Paint_2(object sender, PaintEventArgs e)
-		{
-
-		}
-
 		private void butEliminar_Click(object sender, EventArgs e)
         {
-            //-------------------------Eliminar el proyecto seleccionado----------------------------------------
-            MySqlConnection conect = new MySqlConnection("server=localhost;database=EditorialPiedra;Uid=root;pwd=1016;");
-            conect.Open();
-            MySqlCommand codigo = new MySqlCommand();
-            codigo.Connection = conect;
+            if (co.permiso.Equals(co.administrador))
+            {
+                //-------------------------Eliminar el proyecto seleccionado----------------------------------------
+                try
+                {
+                    //Despliega la confirmacion para eliminar
+                    MessageBox confirmar = new MessageBox("¿Seguro que desea eliminar el proyecto?", 12);
+                    confirmar.ShowDialog();
 
-            codigo.CommandText = ("DELETE FROM Proyectos WHERE ID =" + IDPro+";");
-            MySqlDataReader leer = codigo.ExecuteReader();
 
-            conect.Close();
-            MessageBox mensaje = new MessageBox("Eliminado con exito");
-            mensaje.ShowDialog();
-            this.Close();
+                    if (confirmacion)
+                    {
+                        co.Comando("CALL PROCEDURE delete_Proyectos( "+ IDPro + ");");
+                        MessageBox mensaje = new MessageBox("Eliminado con exito", 12);
+                        mensaje.ShowDialog();
+                        this.Close();
+                    }
 
+                }
+                catch (MySql.Data.MySqlClient.MySqlException)
+                {
+                    MessageBox mensaje = new MessageBox("Este proyecto tiene trabajos asociados", 12);
+                    mensaje.ShowDialog();
+                    this.Close();
+                }
+            }
+            else
+            {
+                AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No cuenta con los permisos para realizar esta acción", 1);
+                mens.ShowDialog();
+            }
         }
     }
 }

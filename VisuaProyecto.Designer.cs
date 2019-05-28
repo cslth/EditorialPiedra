@@ -113,9 +113,11 @@
 			// 
 			// butGuardar
 			// 
-			this.butGuardar.Location = new System.Drawing.Point(19, 348);
+			this.butGuardar.FlatAppearance.BorderColor = System.Drawing.Color.DarkGray;
+			this.butGuardar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.butGuardar.Location = new System.Drawing.Point(20, 348);
 			this.butGuardar.Name = "butGuardar";
-			this.butGuardar.Size = new System.Drawing.Size(71, 32);
+			this.butGuardar.Size = new System.Drawing.Size(70, 32);
 			this.butGuardar.TabIndex = 22;
 			this.butGuardar.Text = "Guardar";
 			this.butGuardar.UseVisualStyleBackColor = true;
@@ -132,37 +134,47 @@
 			// 
 			// butEditar
 			// 
-			this.butEditar.Location = new System.Drawing.Point(19, 348);
+			this.butEditar.BackColor = System.Drawing.Color.Transparent;
+			this.butEditar.FlatAppearance.BorderColor = System.Drawing.Color.DarkGray;
+			this.butEditar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.butEditar.Location = new System.Drawing.Point(20, 348);
 			this.butEditar.Name = "butEditar";
 			this.butEditar.Size = new System.Drawing.Size(70, 32);
 			this.butEditar.TabIndex = 24;
 			this.butEditar.Text = "Editar";
-			this.butEditar.UseVisualStyleBackColor = true;
+			this.butEditar.UseVisualStyleBackColor = false;
 			this.butEditar.Click += new System.EventHandler(this.button2_Click);
 			// 
 			// butEliminar
 			// 
-			this.butEliminar.Location = new System.Drawing.Point(96, 349);
+			this.butEliminar.BackColor = System.Drawing.Color.Transparent;
+			this.butEliminar.FlatAppearance.BorderColor = System.Drawing.Color.DarkGray;
+			this.butEliminar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.butEliminar.Location = new System.Drawing.Point(96, 348);
 			this.butEliminar.Name = "butEliminar";
 			this.butEliminar.Size = new System.Drawing.Size(71, 32);
 			this.butEliminar.TabIndex = 25;
 			this.butEliminar.Text = "Eliminar";
-			this.butEliminar.UseVisualStyleBackColor = true;
+			this.butEliminar.UseVisualStyleBackColor = false;
 			this.butEliminar.Click += new System.EventHandler(this.butEliminar_Click);
 			// 
 			// butCerrar
 			// 
+			this.butCerrar.BackColor = System.Drawing.Color.Transparent;
+			this.butCerrar.FlatAppearance.BorderColor = System.Drawing.Color.DarkGray;
+			this.butCerrar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.butCerrar.Location = new System.Drawing.Point(265, 348);
 			this.butCerrar.Name = "butCerrar";
 			this.butCerrar.Size = new System.Drawing.Size(71, 32);
 			this.butCerrar.TabIndex = 26;
 			this.butCerrar.Text = "Cerrar";
-			this.butCerrar.UseVisualStyleBackColor = true;
+			this.butCerrar.UseVisualStyleBackColor = false;
 			this.butCerrar.Click += new System.EventHandler(this.button4_Click);
 			// 
 			// panel1
 			// 
 			this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.panel1.Controls.Add(this.butEliminar);
 			this.panel1.Controls.Add(this.comboBox1);
 			this.panel1.Controls.Add(this.butEditar);
 			this.panel1.Controls.Add(this.butGuardar);
@@ -176,7 +188,7 @@
 			this.panel1.Name = "panel1";
 			this.panel1.Size = new System.Drawing.Size(376, 403);
 			this.panel1.TabIndex = 28;
-			this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint_2);
+			this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint_1);
 			// 
 			// comboBox1
 			// 
@@ -204,6 +216,8 @@
 			// 
 			// butCancelar
 			// 
+			this.butCancelar.FlatAppearance.BorderColor = System.Drawing.Color.DarkGray;
+			this.butCancelar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.butCancelar.Location = new System.Drawing.Point(265, 348);
 			this.butCancelar.Name = "butCancelar";
 			this.butCancelar.Size = new System.Drawing.Size(71, 32);
@@ -223,6 +237,7 @@
 			this.panel7.Name = "panel7";
 			this.panel7.Size = new System.Drawing.Size(374, 30);
 			this.panel7.TabIndex = 23;
+			this.panel7.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel7_MouseDown);
 			// 
 			// label6
 			// 
@@ -234,13 +249,13 @@
 			this.label6.TabIndex = 22;
 			this.label6.Text = "PROYECTO";
 			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.label6.MouseDown += new System.Windows.Forms.MouseEventHandler(this.label6_MouseDown);
 			// 
 			// VisuaProyecto
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 19F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(376, 403);
-			this.Controls.Add(this.butEliminar);
 			this.Controls.Add(this.richTextBox1);
 			this.Controls.Add(this.nombre);
 			this.Controls.Add(this.label5);
