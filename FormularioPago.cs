@@ -19,12 +19,14 @@ namespace AppProyectoBD
         List<string> metodosNom;
         int opcion;
         public bool acep = false;
+        pagos pa;
         // 0 - Pagar | 2 - Ver un gasto | 1 - Ver un pago hecho
-        public FormularioPago(int PagPro,int opcion, Conexion co)
+        public FormularioPago(pagos pa,int PagPro,int opcion, Conexion co)
         {
             InitializeComponent();
             Region = Funciones.redondear(Width, Height);
 
+            this.pa = pa;
             this.co = co;
             this.opcion = opcion;
             IDPP = PagPro;
@@ -141,7 +143,7 @@ namespace AppProyectoBD
             {
                 if (monto.Text.Equals(""))
                 {
-                    MessageBox mens = new MessageBox("Complete el formulario", 1);
+                    MessageBox mens = new MessageBox("Complete el formulario", 2);
                     mens.ShowDialog();
                     return false;
                 }
@@ -150,7 +152,7 @@ namespace AppProyectoBD
             {
                 if (monto.Text.Equals("") || textConcepto.Text.Equals(""))
                 {
-                    MessageBox mens = new MessageBox("Complete el formulario", 1);
+                    MessageBox mens = new MessageBox("Complete el formulario", 2);
                     mens.ShowDialog();
                     return false;
                 }
@@ -161,13 +163,8 @@ namespace AppProyectoBD
 
         public void actualizar()
         {
-            pagos pag = Application.OpenForms.OfType<pagos>().FirstOrDefault();
-
-            if (pag != null)  //Si encuentra una instancia abierta
-            {
-                pag.datosPagosGastos();
-                pag.datosPagosProgra();
-            }
+            pa.datosPagosProgra();
+            pa.datosPagosGastos();
         }
         public void pago()
         {
@@ -328,11 +325,11 @@ namespace AppProyectoBD
                         if (co.LeerRead)
                             numPago = co.Leer.GetInt32(0) + 1;
                         //Inserto los datos en Pagos
-                        co.Comando("CALL PROCEDURE insert_Pagos(" + numPago + "," + Convert.ToInt32(monto.Text)
-                                   + "," + IDPP + "," + metodosID[metodoPago.SelectedIndex] + ");");
+                        co.Comando("INSERT INTO Pagos (numPago, Monto, PagoProgramadoID, MetodoID, FechaPago) VALUES (" + numPago + "," + Convert.ToInt32(monto.Text)
+                                   + "," + IDPP + "," + metodosID[metodoPago.SelectedIndex] + ",CURDATE());");
 
                         //Actualizo el numero total de pagos del PagroProgramado
-                        co.Comando("CALL PROCEDURE update_NumTotalPagos(" + IDPP + ");");
+                        co.Comando("UPDATE PagoProgramado SET NumTotalPagos = NumTotalPagos-1 WHERE ID = " + IDPP + ";");
 
 
                         MessageBox mens = new MessageBox("Guardado con exito", 2);
@@ -347,17 +344,17 @@ namespace AppProyectoBD
                     {
                         int ultiGasto = 0;
                         //Inserto los datos en gastos
-                        co.Comando("CALL PROCEDURE insert_Gastos(" + textConcepto.Text + ");");
+                        co.Comando("Insert into Gasto(Concepto) Values ('" + textConcepto.Text + "'); ");
                         //Selecciono el gasto que se inserto osea el del ID mayor
                         co.Comando("SELECT MAX(ID) FROM Gasto;");
                         if (co.LeerRead)
                             ultiGasto = co.Leer.GetInt32(0);
 
                         //Se crea el pago asociado a ese gasto
-                        co.Comando("CALL PROCEDURE insert_Pagos2("+ Convert.ToInt32(monto.Text) + "," + 
-									ultiGasto + "," + metodosID[metodoPago.SelectedIndex] + ");");
+                        co.Comando("INSERT INTO Pagos(numPago, Monto, GastoID, MetodoID, FechaPago) VALUES(1," + Convert.ToInt32(monto.Text)
+                                   + "," + ultiGasto + "," + metodosID[metodoPago.SelectedIndex] + ",CURDATE());");
 
-                        MessageBox mens = new MessageBox("Guardado con exito", 2);
+                        MessageBox mens = new MessageBox("Guardado con éxito", 2);
                         mens.ShowDialog();
 
                         //Actualizo los datos de la tabla
@@ -380,7 +377,7 @@ namespace AppProyectoBD
             {
                 try
                 {
-                    MessageBox confirmacion = new MessageBox("¿Seguro que desea eliminar el pago?", 2);
+                    MessageBox confirmacion = new MessageBox("¿Seguro que desea eliminar el pago?", 1);
                     confirmacion.ShowDialog();
                     if (acep)
                     {
@@ -393,9 +390,9 @@ namespace AppProyectoBD
                             if (co.LeerRead)
                                 ID = co.Leer.GetInt32(0);
                             //Elimino el pago
-                            co.Comando("CALL PROCEDURE delete_Pagos(" + IDPP + ");");
+                            co.Comando("CALL delete_Pagos(" + IDPP + ");");
                             //Actualizo el numero total de pagos al que pertence el pago
-                            co.Comando("CALL PROCEDURE update_NumTotalPagos2(" + ID + ");");
+                            co.Comando("UPDATE PagoProgramado SET NumTotalPagos = NumTotalPagos + 1 WHERE ID = " + ID + ";");
                         }
                         else if (opcion == 2)
                         {
@@ -404,10 +401,10 @@ namespace AppProyectoBD
                             if (co.LeerRead)
                                 ID = co.Leer.GetInt32(0);
                             //Elimino el Pago
-                            co.Comando("CALL PROCEDURE delete_Pagos(" + IDPP + ");");
+                            co.Comando("CALL delete_Pagos(" + IDPP + ");");
                             //Agregar UN ON DELETE CASCADE
                             //Elimino el gasto
-                            co.Comando("CALL PROCEDURE delete_Gasto(" + ID + ");");
+                            co.Comando("DELETE FROM Gasto WHERE ID = " + ID + ";");
                         }
                         //Actualizo los datos de la tabla
                         actualizar();
@@ -428,7 +425,7 @@ namespace AppProyectoBD
             }
             else
             {
-                AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No cuenta con los permisos para realizar esta acción", 1);
+                AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No cuenta con los permisos para realizar esta acción", 3);
                 mens.ShowDialog();
             }
         }
@@ -475,7 +472,7 @@ namespace AppProyectoBD
             }
             else
             {
-                AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No cuenta con los permisos para realizar esta acción", 1);
+                AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No cuenta con los permisos para realizar esta acción", 3);
                 mens.ShowDialog();
             }
 
@@ -488,19 +485,19 @@ namespace AppProyectoBD
                 if (opcion == 1)
                 {
                     //Actualizo la info en Pagos
-                    co.Comando("CALL PROCEDURE update_PagosMonto(" + Convert.ToInt32(monto.Text) + ","+ metodosID[metodoPago.SelectedIndex] + "," + IDPP + ");");
+                    co.Comando("CALL update_PagosMonto(" + Convert.ToInt32(monto.Text) + "," + metodosID[metodoPago.SelectedIndex] + "," + IDPP + ");");
                 }
                 else if (opcion == 2)
                 {
                     int IDGasto = 0;
                     //Actualizo la info en Gastos
-                    co.Comando("CALL PROCEDURE update_PagosMonto(" + Convert.ToInt32(monto.Text) + "," + metodosID[metodoPago.SelectedIndex] + "," + IDPP + ");");
+                    co.Comando("CALL update_PagosMonto(" + Convert.ToInt32(monto.Text) + "," + metodosID[metodoPago.SelectedIndex] + "," + IDPP + ");");
                     //Consulto el GasoID para saber a que gasto pertenece 
                     co.Comando("SELECT GastoID FROM Pagos WHERE ID = " + IDPP + ";");
                     if (co.LeerRead)
                         IDGasto = co.Leer.GetInt32(0);
                     //Modifico el Concepto del gasto asignado
-                    co.Comando("CALL PROCEDURE update_Concepto(" + textConcepto.Text + "," + IDPP + ");");
+                    co.Comando("UPDATE Gasto SET Concepto = '" + textConcepto.Text + "' WHERE ID = " + IDPP + ";");
                 }
                 MessageBox mens = new MessageBox("Guardado con exito", 2);
                 mens.ShowDialog();

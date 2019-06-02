@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormularioPago));
             this.cerrar = new System.Windows.Forms.Button();
             this.aceptar = new System.Windows.Forms.Button();
             this.labTrabajo = new System.Windows.Forms.Label();
@@ -319,6 +320,7 @@
             this.ClientSize = new System.Drawing.Size(387, 381);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FormularioPago";
             this.Text = "FormularioPago";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormularioPago_FormClosed);

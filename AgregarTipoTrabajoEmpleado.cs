@@ -67,7 +67,7 @@ namespace AppProyectoBD
                     //Si es opcion 1 se inserta en TipoTrabajos
                     if (opc == 1)
                     {
-                        co.Comando("CALL PROCEDURE insert_TipoTrabajo("+nombre.Text + ", " + descripcion.Text + ");");
+                        co.Comando("INSERT INTO TipoTrabajos (NombreTipoTrab,DescripcionTrab) VALUES('" + nombre.Text + "','" + descripcion.Text + "');");
                     }
     
                 }
@@ -76,12 +76,12 @@ namespace AppProyectoBD
                     //Si es opcion 1 se actualiza TipoTrabajos
                     if (opc == 1)
                     {
-                        co.Comando("CALL PROCEDURE update_TipoTrabajo("+ nombre.Text + "," + descripcion.Text + "," + ID+");");
+                        co.Comando("UPDATE TipoTrabajos SET NombreTipoTrab = '" + nombre.Text + "', DescripcionTrab = '" + descripcion.Text + "' WHERE ID = "+ID+";");
                     }
                     //Si es opcion 2 se actualiza TipoEmpleado
                     else
                     {
-                        co.Comando("CALL PROCEDURE update_Desc_TipoTrabajo(" + descripcion.Text + "," + ID + ");");
+                        co.Comando("UPDATE TipoEmpleado SET Descripcion = '" + descripcion.Text + "' WHERE ID = "+ID+";");
                     }
                 }
                 //Se actualizan los datos de las tablas del frame Utilidades
@@ -95,7 +95,7 @@ namespace AppProyectoBD
             }
             else
             {
-                MessageBox mens = new MessageBox("Rellene todos los campos", 1);
+                MessageBox mens = new MessageBox("Rellene todos los campos", 2);
                 mens.ShowDialog();
             }
         }
@@ -114,10 +114,5 @@ namespace AppProyectoBD
             Funciones.ReleaseCapture();
             Funciones.SendMessage(this.Handle, 0x112, 0xf012, 0);
         }
-
-		private void panel1_Paint(object sender, PaintEventArgs e)
-		{
-
-		}
-	}
+    }
 }

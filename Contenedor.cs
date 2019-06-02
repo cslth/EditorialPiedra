@@ -12,6 +12,9 @@ using MaterialSkin.Controls;
 using System.Runtime.InteropServices;
 using System.Drawing.Drawing2D;
 using System.Threading;
+using MySql.Data.MySqlClient;
+using Inicio;
+using PruebaA;
 
 namespace AppProyectoBD
 {
@@ -19,14 +22,28 @@ namespace AppProyectoBD
     {
         bool estado;
         Form fh;
-        public Form1()
+        bool inic, emp, trab, proy, pag,utilidades;
+        int idUsr;
+        int idSesion;
+
+        Conexion co;
+        public Form1(int idUsr, int idSesion,Conexion co)
         {
             InitializeComponent();
+            Region = Funciones.redondear(Width, Height);
+            this.idUsr = idUsr;
+            this.idSesion = idSesion;
+            this.co = co;
+            inic = true;
+            emp = false;
+            trab = false;
+            pag = false;
             estado = false;
+            utilidades = false;
             //Coloca el frame en el centro
             this.StartPosition = FormStartPosition.CenterScreen;
             //Mando llamar el panel de inicio
-            AbrirForm(new inicio());
+            AbrirForm(new VentanaPrincipal(co));
         }
         
         public static class Util
@@ -63,33 +80,31 @@ namespace AppProyectoBD
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            //Se carga el usuario que ingreso         
+            co.Comando("SELECT usr_login FROM Usuarios WHERE usr_id = "+ idUsr+";");
+            if (co.LeerRead)
+                usuario.Text = co.Leer.GetString(0);
+            while (usuario.Width > sideBar.Width)
+            {
+                usuario.Font = new Font("Gothic A1", usuario.Font.Size - 0.5f, usuario.Font.Style);
+            }
+            int x = sideBar.Width / 2;
+            usuario.Location = new Point(x - usuario.Width / 2, usuario.Location.Y);
         }
 
-        private void materialFlatButton1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void materialFlatButton2_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void principal_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
 
         private void menu_Click_1(object sender, EventArgs e)
         {
-            
             Util.Animate(sideBar, Util.Effect.Roll, 40, 360);
         }
 
 
         private void pbCerrar_Click(object sender, EventArgs e)
         {
+            //Actualiza la ultima sesión
+            co.Comando("UPDATE Sesiones " +
+                       "SET ses_fin = now() " +
+                       "WHERE ses_id = " + idSesion + " and usr_id = " + idUsr + ";");
             Application.Exit();
         }
 
@@ -113,46 +128,89 @@ namespace AppProyectoBD
         {
             this.WindowState = FormWindowState.Minimized;
         } 
-        //Codigo para dar funcion a la barra superior
-        [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
-        private extern static void ReleaseCapture();
-        [DllImport("user32.DLL", EntryPoint = "SendMessage")]
-        private extern static void SendMessage(System.IntPtr hwnd, int wMsg, int wParam, int lParam);
+        
         private void panel7_MouseDown(object sender, MouseEventArgs e)
         {
-            ReleaseCapture();
-            SendMessage(this.Handle, 0x112, 0xf012, 0);
+            Funciones.ReleaseCapture();
+            Funciones.SendMessage(this.Handle, 0x112, 0xf012, 0);
            
         }
 
         private void empleados_Click(object sender, EventArgs e)
         {
-            lbTitulo.Text = "EMPLEADOS";
+            if (!emp)
+            {
+                lbTitulo.Text = "EMPLEADOS";
+                AbrirForm(new Empleados(co));
+                emp = true;
+                inic = false;
+                trab = false;
+                proy = false;
+                pag = false;
+                utilidades = false;
+            }
+           
         }
 
         private void proyectos_Click(object sender, EventArgs e)
         {
-            lbTitulo.Text = "PROYECTOS";
-            AbrirForm(new Proyectos());
+            if (!proy)
+            {
+                lbTitulo.Text = "PROYECTOS";
+                AbrirForm(new Proyectos(co));
+                emp = false;
+                inic = false;
+                trab = false;
+                proy = true;
+                pag = false;
+                utilidades = false;
+            }
         }
 
         private void trabajos_Click(object sender, EventArgs e)
         {
-            lbTitulo.Text = "TRABAJOS";
-            AbrirForm(new Trabajos());
+            if (!trab)
+            {
+                lbTitulo.Text = "TRABAJOS";
+                AbrirForm(new Trabajos(co));
+                emp = false;
+                inic = false;
+                trab = true;
+                proy = false;
+                pag = false;
+                utilidades = false;
+            }
         }
 
         private void reportes_Click(object sender, EventArgs e)
         {
-            lbTitulo.Text = "PAGOS";
-            AbrirForm(new pagos());
-            //Util.Animate(sideBar, Util.Effect.Roll, 150, 360);
+            if (!pag)
+            {
+                lbTitulo.Text = "PAGOS";
+                AbrirForm(new pagos(co));
+                //Util.Animate(sideBar, Util.Effect.Roll, 150, 360);
+                emp = false;
+                inic = false;
+                trab = false;
+                proy = false;
+                pag = true;
+                utilidades = false;
+            }
         }
 
         private void inicio_Click(object sender, EventArgs e)
         {
-            lbTitulo.Text = "INICIO";
-            AbrirForm(new inicio());
+            if (!inic)
+            {
+                lbTitulo.Text = "INICIO";
+                AbrirForm(new VentanaPrincipal(co));
+                emp = false;
+                inic = true;
+                trab = false;
+                proy = false;
+                pag = false;
+                utilidades = false;
+            }
         }
         public void AbrirForm(object form2)
         {
@@ -167,24 +225,28 @@ namespace AppProyectoBD
             fh.StartPosition = FormStartPosition.CenterParent;
         }
 
-        private void panel6_Paint(object sender, PaintEventArgs e)
+        private void button1_Click_1(object sender, EventArgs e)
         {
+            if (!utilidades)
+            {
+                lbTitulo.Text = "UTILIDADES";
+                AbrirForm(new Utilidades(co));
+                emp = false;
+                inic = true;
+                trab = false;
+                proy = false;
+                pag = false;
 
-        }
-
-        private void panel7_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        
-
-        private void panelInfo_Paint(object sender, PaintEventArgs e)
-        {
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
+            //Actualiza la ultima sesion 
+            co.Comando("UPDATE Sesiones " +
+                       "SET ses_fin = now() " +
+                       "WHERE ses_id = " + idSesion + " and usr_id = " + idUsr + ";");
+           
             Login lo = new Login();
             lo.Show();
             this.Close();

@@ -26,12 +26,14 @@ namespace AppProyectoBD
         int TipoTrab;
         int ProID;
         int ProyectoOriginal;
+        Trabajos tra;
+        public bool aceptarElim = false;
                         //1 - Visualizar 2 - Crear un trabajo nuevo 
-        public VisuaTrabajos(Conexion co,int x, int elem)
+        public VisuaTrabajos(Trabajos tra,Conexion co,int x, int elem)
         {
             InitializeComponent();
             Region = Funciones.redondear(Width, Height);
-
+            this.tra = tra;
             this.co = co;
             editando = false;
             aceptar = false;
@@ -155,34 +157,14 @@ namespace AppProyectoBD
                 }
                 else
                 {
-                    MessageBox mensaje = new MessageBox("No se encuentra",12);
+                    MessageBox mensaje = new MessageBox("No se encuentra",3);
                     mensaje.ShowDialog();
                 }
-                //-----------------Consigo los IDs de los empleados del trabajo seleccionado
-                co.Comando("SELECT EmpleadoID FROM Empleado_Trabajos WHERE " + IDTrab + "= TrabajosID;");
-                while (co.LeerRead)
-                {
-                    EmpleadosVisua.Add(co.Leer.GetInt32(0));
-                }
-                int i = EmpleadosVisua.Count;
-                int sub = 0;
-                if (i > 0)
-                    dataGridView1.RowCount = i;
-                else
-                    dataGridView1.RowCount = 1;
-                while (i > 0)
-                {
-                    co.Comando("SELECT ID,Nombre FROM Empleado WHERE " + EmpleadosVisua[sub] + " = ID;");
-                    if (co.LeerRead)
-                    {
-                        EmpleadosNom.Add(co.Leer.GetString(1));
-                        dataGridView1[0, sub].Value = co.Leer.GetInt32(0);
-                        dataGridView1[1, sub].Value = EmpleadosNom[sub];
-                        sub++;
-                    }
-                    i--;
-                }
-                
+
+                //Cargo los empleados asignados al proyecto
+                cargarEmpleados();
+
+
             }
             //Crear nuevo trabajo
             else
@@ -210,13 +192,39 @@ namespace AppProyectoBD
 
             }
         }
-
+        private void cargarEmpleados()
+        {
+            //-----------------Consigo los IDs de los empleados del trabajo seleccionado
+            co.Comando("SELECT EmpleadoID FROM Empleado_Trabajos WHERE " + IDTrab + "= TrabajosID;");
+            while (co.LeerRead)
+            {
+                EmpleadosVisua.Add(co.Leer.GetInt32(0));
+            }
+            int i = EmpleadosVisua.Count;
+            int sub = 0;
+            if (i > 0)
+                dataGridView1.RowCount = i;
+            else
+                dataGridView1.RowCount = 1;
+            while (i > 0)
+            {
+                co.Comando("SELECT ID,Nombre FROM Empleado WHERE " + EmpleadosVisua[sub] + " = ID;");
+                if (co.LeerRead)
+                {
+                    EmpleadosNom.Add(co.Leer.GetString(1));
+                    dataGridView1[0, sub].Value = co.Leer.GetInt32(0);
+                    dataGridView1[1, sub].Value = EmpleadosNom[sub];
+                    sub++;
+                }
+                i--;
+            }
+        }
         //Validacion del formulario
         private bool Validacion()
         {
             if(textNombre.Text.Equals("") || richTextBox1.Text.Equals("") || Tentrega.Text.Equals(""))
             {
-                MessageBox mens = new MessageBox("Complete el formulario", 12);
+                MessageBox mens = new MessageBox("Complete el formulario", 2);
                 mens.ShowDialog();
                 return false;
             }
@@ -252,23 +260,24 @@ namespace AppProyectoBD
 
                     //-----------------Editar unicamente Trabajo--------------------
                     int tiempoEntrega = Convert.ToInt32(Tentrega.Text);
-                    co.Comando("CALL PROCEDURE update_Trabajos(" + textNombre.Text + "," + richTextBox1.Text + "," +
-                                    (comboBox1.SelectedIndex + 1) + "," + tiempoEntrega + "," +  IDTrab + ");");
+                    co.Comando("UPDATE Trabajos SET Nombre  = '" + textNombre.Text + "',Descripcion = '" + richTextBox1.Text + "',TipoTrabajosID = " +
+                                    (comboBox1.SelectedIndex + 1) + ",TiempoEntrega = " + tiempoEntrega +
+                                    ",FechaEntrega = adddate(CURDATE()," + tiempoEntrega + ") WHERE ID = " + IDTrab + ";");
 
                     //Si el proyecto es nulo y se le asigna un proyecto
                     if (ProyectoOriginal == 0 && ProyectosID[comboBox2.SelectedIndex] != 0)
                     {
-                        co.Comando("CALL PROCEDURE update_ProyID(" + ProyectosID[comboBox2.SelectedIndex] + "," + IDTrab + ");");
+                        co.Comando("UPDATE Trabajos SET ProyectosID = " + ProyectosID[comboBox2.SelectedIndex] + " WHERE ID = " + IDTrab + ";");
                     }
                     //Si el proyecto NO es nulo y se le asiga nulo
                     if (ProyectoOriginal != 0 && ProyectosID[comboBox2.SelectedIndex] == 0)
                     {
-                        co.Comando("CALL PROCEDURE update_ProyIDNulo(" + ProyectosID[comboBox2.SelectedIndex] + "," + IDTrab + ");");
+                        co.Comando("UPDATE Trabajos SET ProyectosID = null WHERE ID = " + IDTrab + ";");
                     }
                     //Si el proyecto NO es nulo y se le asigna otro proyecto 
                     if (ProyectoOriginal != 0 && ProyectosID[comboBox2.SelectedIndex] != 0)
                     {
-                        co.Comando("CALL PROCEDURE update_ProyID(" + ProyectosID[comboBox2.SelectedIndex] + "," + IDTrab + ");");
+                        co.Comando("UPDATE Trabajos SET ProyectosID = " + ProyectosID[comboBox2.SelectedIndex] + " WHERE ID = " + IDTrab + ";");
                     }
                     //Si el proyecto es nulo y se le asigna otro nulo, simplemente no se hace nada
 
@@ -312,7 +321,7 @@ namespace AppProyectoBD
             }
             else
             {
-                AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No cuenta con los permisos para realizar esta acción", 1);
+                AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No cuenta con los permisos para realizar esta acción", 3);
                 mens.ShowDialog();
             }
 
@@ -355,7 +364,7 @@ namespace AppProyectoBD
                         {
                             //Si ya estaba quiere decir que pertenece al trabajo y procede a eliminarse de la BD
                             //Mensaje que al acpetar se cambia la variable aceptar a TRUE desde el otro frame
-                            MessageBox mensaje = new MessageBox("¿Seguro que desea eliminar?", 9);
+                            MessageBox mensaje = new MessageBox("¿Seguro que desea eliminar?", 1);
                             mensaje.ShowDialog();
                         }
 
@@ -388,13 +397,13 @@ namespace AppProyectoBD
                                 eliminarElemento(0);
 
                                 //Mensaje de confirmacion
-                                MessageBox confirmacion = new MessageBox("Eliminado con exito", 9);
+                                MessageBox confirmacion = new MessageBox("Eliminado con exito", 2);
                                 confirmacion.ShowDialog();
                             }
                             else
                             {
                                 //En caso de ser <= 1 Entonces lanza la advertencia
-                                MessageBox advertencia = new MessageBox("Un trabajo no puede quedarse sin empleados", 6);
+                                MessageBox advertencia = new MessageBox("Un trabajo no puede quedarse sin empleados", 2);
                                 advertencia.Show();
                                 numPagos = 0;
                             }
@@ -409,12 +418,12 @@ namespace AppProyectoBD
                 }
                 catch (System.NullReferenceException)
                 {
-                    Form mensaje = new MessageBox("Seleccione un empleado", 12);
+                    Form mensaje = new MessageBox("Seleccione un empleado", 2);
                     mensaje.ShowDialog();
                 }
                 catch (System.InvalidCastException)
                 {
-                    Form mensaje = new MessageBox("La tabla esta vacia", 12);
+                    Form mensaje = new MessageBox("La tabla esta vacia", 2);
                     mensaje.ShowDialog();
                 }
 
@@ -424,7 +433,7 @@ namespace AppProyectoBD
             }
             else
             {
-                AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No cuenta con los permisos para realizar esta acción", 1);
+                AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No cuenta con los permisos para realizar esta acción", 2);
                 mens.ShowDialog();
             }
 
@@ -482,17 +491,17 @@ namespace AppProyectoBD
 
                         //Se mandan al siguiente Frame para ser dados de alta, tambien se manda cuantos son y se pone
                         // 0 en Trabajo porque apenas se va a crear y se manda la opcion 1 que es crear un nuevo trabajo
-                        fpp = new FormularioProgramarPago(IDs, dataGridView1.RowCount, 0, 1, co);
+                        fpp = new FormularioProgramarPago(tra,IDs, dataGridView1.RowCount, 0, 1, co);
                         fpp.Show();
                     }
                     catch (NullReferenceException er)
                     {
-                        MessageBox error = new MessageBox("No hay ningun empleado asignado", 10);
+                        MessageBox error = new MessageBox("No hay ningun empleado asignado", 3);
                         error.ShowDialog();
                     }
                     catch (InvalidCastException)
                     {
-                        MessageBox error = new MessageBox("No hay ningun empleado asignado", 10);
+                        MessageBox error = new MessageBox("No hay ningun empleado asignado", 3);
                         error.ShowDialog();
                     }
 
@@ -501,8 +510,8 @@ namespace AppProyectoBD
                 {
                     //Se manda el arreglo con los nuevos empleados, su tamaño, el ID del trabajo al que van a ser agregados
                     // y la opcion 3 que indica dar de alta empleados en trabajo existente
-                    fpp = new FormularioProgramarPago(EmpleadosModoEdicion, EmpleadosModoEdicion.Count, IDTrab, 3, co);
-                    fpp.Show();
+                    fpp = new FormularioProgramarPago(tra,EmpleadosModoEdicion, EmpleadosModoEdicion.Count, IDTrab, 3, co);
+                    fpp.ShowDialog();
                 }
             }
         }
@@ -536,30 +545,35 @@ namespace AppProyectoBD
                 //Si no tiene pagos asociados a ningun pagoProgramado
                 if (pagos == 0)
                 {
-                    List<int> IDPagosProgra = new List<int>();
-                    //Guardo los IDs de los pagos programados asociados al trabajo 
-                    co.Comando("SELECT PagoProgramadoID FROM Pago_Empleado_Trabajos WHERE TrabajosID = " + IDTrab);
-                    while (co.LeerRead)
-                        IDPagosProgra.Add(co.Leer.GetInt32(0));
-
-
-                    //Elimino el trabajo y se elimina el registro de Empleado_Trabajos y Pago_Empleado_Trabajos en cascada
-                    co.Comando("DELETE FROM Trabajos WHERE ID = " + IDTrab + ";");
-
-                    //Elimino los Pagos Programados
-                    PagosProgra = IDPagosProgra.Count;
-                    i = 0;
-                    while (PagosProgra > 0)
-                    {
-                        co.Comando("DELETE FROM  PagoProgramado WHERE ID = " + IDPagosProgra[i] + ";");
-                        i++;
-                        PagosProgra--;
-                    }
-
-                    MessageBox mens = new MessageBox("Eliminado con exito", 12);
+                    MessageBox mens = new MessageBox("¿Seguro que desea eliminar el trabajo?", 1);
                     mens.ShowDialog();
+                    if (aceptarElim)
+                    {
+                        List<int> IDPagosProgra = new List<int>();
+                        //Guardo los IDs de los pagos programados asociados al trabajo 
+                        co.Comando("SELECT PagoProgramadoID FROM Pago_Empleado_Trabajos WHERE TrabajosID = " + IDTrab);
+                        while (co.LeerRead)
+                            IDPagosProgra.Add(co.Leer.GetInt32(0));
 
-                    this.Close();
+
+                        //Elimino el trabajo y se elimina el registro de Empleado_Trabajos y Pago_Empleado_Trabajos en cascada
+                        co.Comando("DELETE FROM Trabajos WHERE ID = " + IDTrab + ";");
+
+                        //Elimino los Pagos Programados
+                        PagosProgra = IDPagosProgra.Count;
+                        i = 0;
+                        while (PagosProgra > 0)
+                        {
+                            co.Comando("DELETE FROM  PagoProgramado WHERE ID = " + IDPagosProgra[i] + ";");
+                            i++;
+                            PagosProgra--;
+                        }
+
+                        MessageBox mens1 = new MessageBox("Eliminado con exito", 2);
+                        mens1.ShowDialog();
+
+                        this.Close();
+                    }
 
                 }
                 else
@@ -567,18 +581,19 @@ namespace AppProyectoBD
                     MessageBox men;
                     //En caso contrario muestro los pagos asociados al trabajo
                     if (pagos > 1)
-                        men = new MessageBox("No se puede eliminar tiene " + pagos + " pagos asociados", 8);
+                        men = new MessageBox("No se puede eliminar tiene " + pagos + " pagos asociados", 2);
                     else
-                        men = new MessageBox("No se puede eliminar tiene " + pagos + " pago asociado", 8);
+                        men = new MessageBox("No se puede eliminar tiene " + pagos + " pago asociado", 2);
                     men.Show();
                 }
             }
             else
             {
-                AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No cuenta con los permisos para realizar esta acción", 1);
+                AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No cuenta con los permisos para realizar esta acción", 3);
                 mens.ShowDialog();
             }
-            
+            //Actualizo la info de trabajos
+            tra.DatosTablas();
 
         }
 
@@ -611,10 +626,10 @@ namespace AppProyectoBD
             if (co.permiso.Equals(co.administrador))
             {
                 //Botones
-                butEditar.Visible = true;
+                butEditar.Visible = false;
                 butGuardar.Visible = false;
                 butEliminar.Visible = false;
-                butCerrar.Visible = false;
+                butCerrar.Visible = true;
                 editarEncargados.Visible = false;
                 cancelar.Visible = true;
                 AgreEmpleado.Visible = true;
@@ -633,7 +648,7 @@ namespace AppProyectoBD
             }
             else
             {
-                AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No cuenta con los permisos para realizar esta acción", 1);
+                AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No cuenta con los permisos para realizar esta acción", 3);
                 mens.ShowDialog();
             }
         }
@@ -660,6 +675,10 @@ namespace AppProyectoBD
             Tentrega.Enabled = false;
             comboBox3.Enabled = false;
             dataGridView1.Enabled = false;
+            //Creo otra instancia con los datos correctos
+            VisuaTrabajos frame2 = new VisuaTrabajos(tra, co, IDTrab, sel);
+            frame2.ShowDialog();
+            this.Close();
         }
 
         private void reasignar_Click(object sender, EventArgs e)

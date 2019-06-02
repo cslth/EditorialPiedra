@@ -16,11 +16,12 @@ namespace AppProyectoBD
         int sel, IDPro;
         Conexion co;
         public bool confirmacion;
-        public VisuaProyecto(Conexion co,int id, int elem)
+        Proyectos pro;
+        public VisuaProyecto(Proyectos pro,Conexion co,int id, int elem)
         {
             InitializeComponent();
             Region = Funciones.redondear(Width, Height);
-
+            this.pro = pro;
             this.co = co;
             //Ajusto el formato de los datetimePicker
             dateTimePicker1.Format = DateTimePickerFormat.Custom;
@@ -60,18 +61,7 @@ namespace AppProyectoBD
                 }
                 //----------------------- REVISAR EN LA COMPUTADORA DE JOSUE ----------------------------------------
                 
-                /*string fechaInicio = co.Leer.GetString(3);
-                string año = fechaInicio.Substring(6, 4);
-                string mes = fechaInicio.Substring(3, 2);
-                string dia = fechaInicio.Substring(0, 2);
-                dateTimePicker1.Value = new DateTime(Convert.ToInt32(año),Convert.ToInt32(mes),Convert.ToInt32(dia));*/
-
-                /*string fechaFin = co.Leer.GetString(4);
-                string año2 = fechaFin.Substring(6, 4);
-                string mes2 = fechaFin.Substring(3, 2);
-                string dia2 = fechaFin.Substring(0, 2);
-                dateTimePicker2.Value = new DateTime(Convert.ToInt32(año2), Convert.ToInt32(mes2), Convert.ToInt32(dia2));*/
-
+            
                 List<String> Nombre = new List<String>();
                 Nombre.Add(co.Leer.GetString(5));
                 comboBox1.DataSource = Nombre;
@@ -110,7 +100,7 @@ namespace AppProyectoBD
         {
             if (nombre.Text.Equals("") || richTextBox1.Text.Equals(""))
             {
-                MessageBox mens = new MessageBox("Complete el formulario", 12);
+                MessageBox mens = new MessageBox("Complete el formulario", 2);
                 mens.ShowDialog();
                 return false;
             }
@@ -163,7 +153,7 @@ namespace AppProyectoBD
             }
             else
             {
-                AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No cuenta con los permisos para realizar esta acción", 1);
+                AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No cuenta con los permisos para realizar esta acción", 3);
                 mens.ShowDialog();
             }
         }
@@ -185,47 +175,31 @@ namespace AppProyectoBD
                     richTextBox1.Enabled = false;
 
                     //----------------------Guaradr un proyecto editado------------------------------
-                    /*string fechaInicio = dateTimePicker1.Text;
-                    string año = fechaInicio.Substring(6, 4);
-                    string mes = fechaInicio.Substring(2, 4);
-                    string dia = fechaInicio.Substring(0, 2);
-                    string fecha1 = año + mes + dia;*/
                     string fecha1 = dateTimePicker1.Value.Date.ToString("yyyy-MM-dd");
 
-                    /*string fechaFin = dateTimePicker2.Text;
-                    string año2 = fechaFin.Substring(6, 4);
-                    string mes2 = fechaFin.Substring(2, 4);
-                    string dia2 = fechaFin.Substring(0, 2);
-                    string fecha2 = año2 + mes2 + dia2;*/
                     string fecha2 = dateTimePicker2.Value.Date.ToString("yyyy-MM-dd");
 
-                    co.Comando("CALL PROCEDURE update_Proyectos(" + nombre.Text + "," + richTextBox1.Text + "," + fecha1 + "," + fecha2 + "," + comboBox1.Text + "," + IDPro + ");");
+                    co.Comando("UPDATE Proyectos SET Nombre ='" + nombre.Text + "',Descripcion = '" + richTextBox1.Text + "',FechaInicio ='" + fecha1 + "',FechaFin ='" + fecha2 + "',Encargado ='" + comboBox1.Text + "'" +
+                                            "WHERE ID=" + IDPro + ";");
                     //---------------------------------------------------------------------------------
+                    pro.DatosTablas();
                 }
                 //Opcion guardar si es desde agregar nuevo proyecto
                 else
                 {
 
                     //----------------------Insertar datos en Proyectos--------------------------
-                    /*string fechaInicio = dateTimePicker1.Text;
-                    string año = fechaInicio.Substring(6, 4);
-                    string mes = fechaInicio.Substring(2, 4);
-                    string dia = fechaInicio.Substring(0, 2);
-                    string fecha1 = año + mes + dia;*/
                     string fecha1 = dateTimePicker1.Value.Date.ToString("yyyy-MM-dd");
 
-                    /*string fechaFin = dateTimePicker2.Text;
-                    string año2 = fechaFin.Substring(6, 4);
-                    string mes2 = fechaFin.Substring(2, 4);
-                    string dia2 = fechaFin.Substring(0, 2);
-                    string fecha2 = año2 + mes2 + dia2;*/
                     string fecha2 = dateTimePicker2.Value.Date.ToString("yyyy-MM-dd");
 
-                    co.Comando("CALL PROCEDURE insert_Proyectos(" + nombre.Text + "," + richTextBox1.Text + "," + fecha1 + "," +
-																 fecha2 + "," + comboBox1.Text + ");");
+                    co.Comando("INSERT INTO Proyectos (Nombre,Descripcion,FechaInicio, FechaFin, Encargado ) " +
+                                         " VALUES('" + nombre.Text + "','" + richTextBox1.Text + "','" + fecha1 + "'," +
+                                         "'" + fecha2 + "','" + comboBox1.Text + "');");
 
                     //------------------------------------------------------------------------------
-                    Form message = new MessageBox("Guardado con exito", 12);
+                    Form message = new MessageBox("Guardado con exito", 2);
+                    pro.DatosTablas();
                     message.ShowDialog();
                     this.Close();
 
@@ -251,15 +225,8 @@ namespace AppProyectoBD
 
         private void VisuaProyecto_FormClosed(object sender, FormClosedEventArgs e)
         {
-            Proyectos frm2 = Application.OpenForms.OfType<Proyectos>().FirstOrDefault();
-
-            if (frm2 != null)  //Si encuentra una instancia abierta
-            {
-                frm2.DatosTablas();
-                this.Close();
-            }
-           
-          
+            pro.DatosTablas();
+                   
         }
 
         private void panel7_MouseDown(object sender, MouseEventArgs e)
@@ -272,12 +239,7 @@ namespace AppProyectoBD
             Funciones.SendMessage(this.Handle, 0x112, 0xf012, 0);
         }
 
-		private void panel1_Paint_1(object sender, PaintEventArgs e)
-		{
-
-		}
-
-		private void butEliminar_Click(object sender, EventArgs e)
+        private void butEliminar_Click(object sender, EventArgs e)
         {
             if (co.permiso.Equals(co.administrador))
             {
@@ -285,14 +247,14 @@ namespace AppProyectoBD
                 try
                 {
                     //Despliega la confirmacion para eliminar
-                    MessageBox confirmar = new MessageBox("¿Seguro que desea eliminar el proyecto?", 12);
+                    MessageBox confirmar = new MessageBox("¿Seguro que desea eliminar el proyecto?", 1);
                     confirmar.ShowDialog();
 
 
                     if (confirmacion)
                     {
-                        co.Comando("CALL PROCEDURE delete_Proyectos( "+ IDPro + ");");
-                        MessageBox mensaje = new MessageBox("Eliminado con exito", 12);
+                        co.Comando("DELETE FROM Proyectos WHERE ID =" + IDPro + ";");
+                        MessageBox mensaje = new MessageBox("Eliminado con exito", 2);
                         mensaje.ShowDialog();
                         this.Close();
                     }
@@ -300,16 +262,19 @@ namespace AppProyectoBD
                 }
                 catch (MySql.Data.MySqlClient.MySqlException)
                 {
-                    MessageBox mensaje = new MessageBox("Este proyecto tiene trabajos asociados", 12);
+                    MessageBox mensaje = new MessageBox("Este proyecto tiene trabajos asociados", 3);
                     mensaje.ShowDialog();
                     this.Close();
                 }
             }
             else
             {
-                AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No cuenta con los permisos para realizar esta acción", 1);
+                AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No cuenta con los permisos para realizar esta acción", 3);
                 mens.ShowDialog();
             }
+
+            //Actualizo los datos de Proyectos
+            pro.DatosTablas();
         }
     }
 }

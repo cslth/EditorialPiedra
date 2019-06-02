@@ -30,6 +30,7 @@
         {
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(VisuaTrabajos));
             this.panel1 = new System.Windows.Forms.Panel();
             this.año = new System.Windows.Forms.RadioButton();
             this.mes = new System.Windows.Forms.RadioButton();
@@ -452,6 +453,7 @@
             this.ClientSize = new System.Drawing.Size(730, 330);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "VisuaTrabajos";
             this.Text = "VisuaTrabajos";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.VisuaTrabajos_FormClosed);

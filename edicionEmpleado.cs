@@ -29,9 +29,11 @@ namespace PruebaA
 		List<int> idRedes = new List<int>();
 
         public bool resultado = false;
+        Bitmap bmp;
+        bool cambioFoto = false;
 
-		//DECLARACION DE VARIABLES DONDE SE ALMACENARÁ INFORMACIÓN
-		public static string nombre = "";
+        //DECLARACION DE VARIABLES DONDE SE ALMACENARÁ INFORMACIÓN
+        public static string nombre = "";
 		public static string email = "";
 		public static string calle = "";
 		public static string colonia = "";
@@ -73,7 +75,7 @@ namespace PruebaA
 
 			catch (Exception)
 			{
-                AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No se puede mostrar la inormación",3);
+                AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No se puede mostrar la información",3);
                 mens.ShowDialog();
 			}
 
@@ -92,8 +94,11 @@ namespace PruebaA
 			//AÑADE RENGLONES A LA TABLA VIRTUAL Y EL DATASOURCE DELDATAGRIDVIEW TOMA SUS DATOS
 			try
 			{
-				redes.Rows.Add(cbRedes.Text, tbCuenta.Text);
-				tablaRedes.DataSource = redes;
+                if (!tbCuenta.Text.Equals(null) && !tbCuenta.Text.Equals(""))
+                {
+                    redes.Rows.Add(cbRedes.Text, tbCuenta.Text);
+                    tablaRedes.DataSource = redes;
+                }
 			}
 
 			catch (Exception)
@@ -225,7 +230,6 @@ namespace PruebaA
 
 			catch (Exception)
 			{
-                // System.Windows.Forms.MessageBox.Show("No se han podido cargar los tipos de redes sociales");
                 AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No se han podido cargar los tipos de redes sociales", 3);
                 mens.ShowDialog();
             }
@@ -233,11 +237,6 @@ namespace PruebaA
 
 		private void btnCancelar_Click(object sender, EventArgs e)
 		{
-            /*DialogResult resultado = System.Windows.Forms.MessageBox.Show("¿Está seguro de que quiere cancelar?", "Click en Sí para confirmar", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-			if (resultado == DialogResult.Yes)
-			{
-				this.Close();
-			}*/
             this.Close();
 		}
 
@@ -250,17 +249,14 @@ namespace PruebaA
 
 			if (seleccion.ShowDialog() == DialogResult.OK)
 			{
-				imgTrab1.ImageLocation = Path.GetFullPath(seleccion.FileName).Replace(@"\", @"\\");
-				label13.Visible = false;
+                Bitmap orig = new Bitmap(Path.GetFullPath(seleccion.FileName).Replace(@"\", @"\\"));
+                bmp = new Bitmap(Redimensionar(orig, 270, 270));
+                imgTrab1.Image = bmp;
+                cambioFoto = true;
+                label13.Visible = false;
 				label2.Visible = false;
 			}
 
-			else
-			{
-                //System.Windows.Forms.MessageBox.Show("No se seleccionó ninguna imagen", "Sin selección", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No se seleccionó ninguna imagen", 2);
-                mens.ShowDialog();
-            }
 		}
 
 		private void label13_Click(object sender, EventArgs e)
@@ -272,40 +268,40 @@ namespace PruebaA
 
 			if (seleccion.ShowDialog() == DialogResult.OK)
 			{
-				imgTrab1.ImageLocation = Path.GetFullPath(seleccion.FileName).Replace(@"\", @"\\");
-				label13.Visible = false;
+                Bitmap orig = new Bitmap(Path.GetFullPath(seleccion.FileName).Replace(@"\", @"\\"));
+                bmp = new Bitmap(Redimensionar(orig, 270, 270));
+                imgTrab1.Image = bmp;
+                cambioFoto = true;
+                label13.Visible = false;
 				label2.Visible = false;
 			}
 
-			else
-			{
-                //.Windows.Forms.MessageBox.Show("No se seleccionó ninguna imagen", "Sin selección", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No se seleccionó ninguna imagen", 2);
-                mens.ShowDialog();
-            }
 		}
-
-		private void btn_addWork_Click(object sender, EventArgs e)
+        private Bitmap Redimensionar(Image imagenOriginal, int ancho, int alto)
+        {
+            Bitmap ImagenRedimencionda = new Bitmap(ancho, alto);
+            Graphics.FromImage(ImagenRedimencionda).DrawImage(imagenOriginal, 0, 0, ancho, alto);
+            Bitmap imagenFinal = new Bitmap(ImagenRedimencionda);
+            return imagenFinal;
+        }
+        private void btn_addWork_Click(object sender, EventArgs e)
 		{
 			//ACUMULAR EN CADENA DEPENDIENDO DE CIERTOS FACTORES, ADEMÁS DE PROHIBIR QUE SE PUEDA INGRESAR IMPRENTA Y PUBLICIDAD
 			if (works.Count != 0 && (cbTipoTrab.Text == "Imprenta" || cbTipoTrab.Text == "Publicidad"))
 			{
-                //System.Windows.Forms.MessageBox.Show("No puedes agregar imprenta y publicidad teniendo a otros trabajos");
-                AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No puedes agregar imprenta y publicidad teniendo a otros trabajos", 1);
+                AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No puedes agregar imprenta y publicidad teniendo a otros trabajos", 2);
                 mens.ShowDialog();
             }
 
 			else if (works.Count != 0 && (works[works.Count - 1] == "Imprenta" || works[works.Count - 1] == "Publicidad") && (cbTipoTrab.Text != "Imprenta" || cbTipoTrab.Text != "Publicidad"))
 			{
-                //System.Windows.Forms.MessageBox.Show("No se puede agregar otro trabajo teniendo a imprenta o publicidad");
-                AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No se puede agregar otro trabajo teniendo a imprenta o publicidad", 1);
+                AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No se puede agregar otro trabajo teniendo a imprenta o publicidad", 2);
                 mens.ShowDialog();
             }
 
 			else if (works.Count != 0 && works.Contains(cbTipoTrab.Text))
 			{
-                //System.Windows.Forms.MessageBox.Show("No se pueden duplicar los datos");
-                AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No se pueden duplicar los datos", 1);
+                AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No se pueden duplicar los datos", 2);
                 mens.ShowDialog();
             }
 
@@ -382,9 +378,16 @@ namespace PruebaA
 			bool redes = tablaRedes.Rows.Count > 1 && tablaRedes.Rows != null;
 			bool worksL = works.Count >= 1;
 			string updateDatosEmpleado;
+            // Inicia la transacción
+            co.Comando("START TRANSACTION;");
+            if (cambioFoto)
+                imgTrabajador1Loc = Path.Combine("C:\\Imagenes\\", "imagen" + (f1.idOtroForm) + ".jpeg").Replace(@"\", @"\\");
+            else
+                imgTrabajador1Loc = Path.GetFullPath(imgTrab1.ImageLocation).Replace(@"\", @"\\");
 
-			//CASO 1: TENER LOS DATOS
-			if (textos && telefonos && redes && worksL)
+            
+            //CASO 1: TENER LOS DATOS
+            if (textos && telefonos && redes && worksL)
 			{
 				nombre = tbNombre.Text;
 				email = tbEmail.Text;
@@ -395,16 +398,18 @@ namespace PruebaA
 				estado = tbEstado.Text;
 				rfc = tbRFC.Text;
 				int sexo = radioButton1.Checked ? 1 : 0;
-				//ADAPTAMOS AL FORMATO
-				fechaNac = fechaN.Value.Date.ToString("yyyy-MM-dd");
-				imgTrabajador1Loc = Path.GetFullPath(imgTrab1.ImageLocation).Replace(@"\", @"\\");
+               
+                //ADAPTAMOS AL FORMATO
+                fechaNac = fechaN.Value.Date.ToString("yyyy-MM-dd");
 
-				updateDatosEmpleado = "UPDATE Empleado " +
+                /*updateDatosEmpleado = "UPDATE Empleado " +
 									  "SET " +
 									  "Nombre ='" + nombre + "', email = '" + email + "', Calle = '" + calle + "', Colonia = '" + colonia +
 									  "', CP = " + cp + ", Ciudad = '" + ciudad + "', Estado = '" + estado + "', RFC = '" + rfc +
 									  "', FechaNacimiento = '" + fechaNac + "', imagenEmpleado = ' " + imgTrabajador1Loc + "', Sexo = " + sexo +
-									  " WHERE ID = " + f1.idOtroForm + ";";
+									  " WHERE ID = " + f1.idOtroForm + ";";*/
+                updateDatosEmpleado = "CALL update_EdicionEmpleado("+nombre+", "+email+", "+calle+", "+colonia+", "+cp+"," +
+                                        " "+ciudad+", "+estado+", "+rfc+", "+fechaNac+", "+imgTrabajador1Loc+", "+sexo+", "+f1.idOtroForm+");";
                 try
                 {
                     try
@@ -415,14 +420,13 @@ namespace PruebaA
 
                     catch (Exception)
                     {
-                        //System.Windows.Forms.MessageBox.Show("Algo salió mal al editar los datos del empleado");
                         AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("Algo salió mal al editar los datos del empleado", 3);
                         mens.ShowDialog();
+                        co.Comando("ROLLBACK;");
                     }
 
                     finally
                     {
-                        //if (co != null) co.Cerrar();
                         this.Close();
                     }
 
@@ -430,96 +434,92 @@ namespace PruebaA
                     //ELIMINA LOS DATOS PARA PODER SUSTITUIRLOS
                     try
                     {
-                        co.Comando("DELETE FROM Telefonos WHERE EmpleadoID = " + f1.idOtroForm + ";");
+                        // co.Comando("DELETE FROM Telefonos WHERE EmpleadoID = " + f1.idOtroForm + ";");
+                        co.Comando("CALL delete_EdicionEmpleado(" + f1.idOtroForm + ");");
 
                         for (int i = 0; i < tablaTels.Rows.Count - 1; i++)
                         {
-                            co.Comando("INSERT INTO Telefonos VALUES(" +
-                                f1.idOtroForm + ",'" + tablaTels.Rows[i].Cells[0].Value + "');");
+                            //co.Comando("INSERT INTO Telefonos VALUES(" +
+                            //    f1.idOtroForm + ",'" + tablaTels.Rows[i].Cells[0].Value + "');");
+                            co.Comando("CALL insertTel_EdicionEmpleado("+f1.idOtroForm+", '"+ tablaTels.Rows[i].Cells[0].Value + "');");
                         }
                     }
 
                     catch (Exception)
                     {
-                        //System.Windows.Forms.MessageBox.Show("Algo salió mal al editar los teléfonos del empleado");
                         AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("Algo salió mal al editar los teléfonos del empleado", 3);
                         mens.ShowDialog();
+                        co.Comando("ROLLBACK;");
+                        this.Close();
                     }
 
                     //ELIMINA LOS DATOS PARA PODER SUSTITUIRLOS
                     try
                     {
-                        co.Comando("DELETE FROM Empleado_TipoEmpleado WHERE EmpleadoID = " + f1.idOtroForm + ";");
+                        co.Comando("CALL delete_e_te("+f1.idOtroForm+");");
 
                         for (int i = 0; i < works.Count; i++)
                         {
                             switch (works[i])
                             {
                                 case "Diseñador":
-                                    co.Comando("INSERT INTO Empleado_TipoEmpleado VALUES((SELECT ID " +
-                                                 "FROM Empleado WHERE ID = " + f1.idOtroForm + "), " + 1 + ");");
+                                    //co.Comando("INSERT INTO Empleado_TipoEmpleado VALUES((SELECT ID " +
+                                    //             "FROM Empleado WHERE ID = " + f1.idOtroForm + "), " + 1 + ");");
+                                    co.Comando("CALL insert_e_te("+f1.idOtroForm+", 1);");
                                     break;
 
                                 case "Editor":
-                                    co.Comando("INSERT INTO Empleado_TipoEmpleado VALUES((SELECT ID " +
-                                                     "FROM Empleado WHERE ID = " + f1.idOtroForm + "), " + 2 + ");");
+                                    co.Comando("CALL insert_e_te(" + f1.idOtroForm + ", 2);");
                                     break;
 
                                 case "Fotografo":
-                                    co.Comando("INSERT INTO Empleado_TipoEmpleado VALUES((SELECT ID " +
-                                                     "FROM Empleado WHERE ID = " + f1.idOtroForm + "), " + 3 + ");");
+                                    co.Comando("CALL insert_e_te(" + f1.idOtroForm + ", 3);");
                                     break;
 
                                 case "Maquetador":
-                                    co.Comando("INSERT INTO Empleado_TipoEmpleado VALUES((SELECT ID " +
-                                                     "FROM Empleado WHERE ID = " + f1.idOtroForm + "), " + 4 + ");");
+                                    co.Comando("CALL insert_e_te(" + f1.idOtroForm + ", 4);");
                                     break;
 
                                 case "Ilustrador":
-                                    co.Comando("INSERT INTO Empleado_TipoEmpleado VALUES((SELECT ID " +
-                                                     "FROM Empleado WHERE ID = " + f1.idOtroForm + "), " + 5 + ");");
+                                    co.Comando("CALL insert_e_te(" + f1.idOtroForm + ", 5);");
                                     break;
 
                                 case "Imprenta":
-
-                                    co.Comando("INSERT INTO Empleado_TipoEmpleado VALUES((SELECT ID " +
-                                                     "FROM Empleado WHERE ID = " + f1.idOtroForm + "), " + 6 + ");");
+                                    co.Comando("CALL insert_e_te(" + f1.idOtroForm + ", 6);");
                                     break;
 
 
                                 case "Publicidad":
-                                    co.Comando("INSERT INTO Empleado_TipoEmpleado VALUES((SELECT ID " +
-                                                     "FROM Empleado WHERE ID = " + f1.idOtroForm + "), " + 7 + ");");
+                                    co.Comando("CALL insert_e_te(" + f1.idOtroForm + ", 7);");
                                     break;
                             }
 
                         }
 
-                        //System.Windows.Forms.MessageBox.Show("Se ha editado al empleado");
-                        AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("Cambios guardados con exito", 2);
-                        mens.ShowDialog();
-                        f1.refreshTable();
-                        this.Close();
+                        
                     }
 
                     catch (Exception)
                     {
-                        //System.Windows.Forms.MessageBox.Show("No se ha podido editar los datos de los trabajos del empleado");
                         AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No se ha podido editar los datos de los trabajos del empleado", 3);
                         mens.ShowDialog();
+                        co.Comando("ROLLBACK;");
+                        this.Close();
                     }
 
                     //ELIMINA LOS DATOS PARA PODER SUSTITUIRLOS
                     try
                     {
-                        co.Comando("DELETE FROM RedesSociales WHERE EmpleadoID = " + f1.idOtroForm + ";");
+                        //co.Comando("DELETE FROM RedesSociales WHERE EmpleadoID = " + f1.idOtroForm + ";");
+                        co.Comando("CALL delete_RedesSociales("+f1.idOtroForm+");");
                     }
 
                     catch (Exception)
                     {
-                        //System.Windows.Forms.MessageBox.Show("Algo salió mal al editar las redes sociales del empleado");
                         AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("Algo salió mal al editar las redes sociales del empleado", 3);
                         mens.ShowDialog();
+                        co.Comando("ROLLBACK;");
+                        this.Close();
 
                     }
 
@@ -536,49 +536,59 @@ namespace PruebaA
                     }
                     catch (Exception)
                     {
-                        //System.Windows.Forms.MessageBox.Show("No se han encontrado las redes sociales insertadas\nSi quieres agregar una nueva red nueva debes hacerlo en UTILIDADES");
                         AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No se han encontrado las redes sociales insertadas\nSi quieres agregar una nueva red nueva debes hacerlo en UTILIDADES", 3);
                         mens.ShowDialog();
+                        co.Comando("ROLLBACK;");
+                        this.Close();
                     }
 
                    try
                    {
-                    for (int i = 0; i < tablaRedes.Rows.Count - 1; i++)
-                    {
-                        co.Comando("INSERT INTO RedesSociales VALUES" +
-                            "(" + f1.idOtroForm + ",'" + tablaRedes.Rows[i].Cells[1].Value + "'," + idRedes[i] + ");");
+                        for (int i = 0; i < tablaRedes.Rows.Count - 1; i++)
+                        {
+                            //co.Comando("INSERT INTO RedesSociales VALUES" +
+                            //    "(" + f1.idOtroForm + ",'" + tablaRedes.Rows[i].Cells[1].Value + "'," + idRedes[i] + ");");
+                            co.Comando("CALL insert_RedesSociales("+f1.idOtroForm+", '"+ tablaRedes.Rows[i].Cells[1].Value + "', "+ idRedes[i] + ");");
                     }
 
-                   }
-                //}
-
-                   catch (Exception)
+                        AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("Cambios guardados con exito", 2);
+                        mens.ShowDialog();
+                        
+                        f1.refreshTable();
+                        this.Close();
+                    }
+               
+                   catch (Exception er)
                    {
-                    AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("Algo salió mal al editar las redes sociales del empleado", 3);
-                    mens.ShowDialog();
-                   }
+                        AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("Algo salió mal al editar las redes sociales del empleado", 3);
+                        mens.ShowDialog();
+                        co.Comando("ROLLBACK;");
+                        this.Close();
+                    }
 
                 }
                 catch (Exception)
                 {
-                    //System.Windows.Forms.MessageBox.Show("Algo ha salido mal en la edición de datos del empleado");
                     AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("Algo ha salido mal en la edición de datos del empleado", 3);
                     mens.ShowDialog();
+                    co.Comando("ROLLBACK;");
+                    this.Close();
                 }
 
-                //finally
+                finally
                 {
-                    //if (co != null) co.Cerrar();
+                    co.Comando("COMMIT;");
+                    bmp.Save(imgTrabajador1Loc);
                 }
+
 			}
 			
 			//CASO 2: SIN REDES SOCIALES
 			else if (textos && telefonos && redes == false && worksL)
 			{
-                //DialogResult resultado = System.Windows.Forms.MessageBox.Show("¿Está seguro de que quiere continuar sin redes sociales?", "Click en Sí para confirmar", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                AppProyectoBD.MessageBox res = new AppProyectoBD.MessageBox("¿Está seguro de que quiere continuar sin redes sociales?", 2);
+                AppProyectoBD.MessageBox res = new AppProyectoBD.MessageBox("¿Está seguro de que quiere continuar sin redes sociales?", 1);
                 res.ShowDialog();
-                //if (resultado == DialogResult.Yes)
+      
                 if (resultado)
                 {
 					nombre = tbNombre.Text;
@@ -592,14 +602,9 @@ namespace PruebaA
 					int sexo = radioButton1.Checked ? 1 : 0;
 					//ADAPTAMOS AL FORMATO
 					fechaNac = fechaN.Value.Date.ToString("yyyy-MM-dd");
-					imgTrabajador1Loc = Path.GetFullPath(imgTrab1.ImageLocation).Replace(@"\", @"\\");
 
-					updateDatosEmpleado = "UPDATE Empleado " +
-									  "SET " +
-									  "Nombre ='" + nombre + "', email = '" + email + "', Calle = '" + calle + "', Colonia = '" + colonia +
-									  "', CP = " + cp + ", Ciudad = '" + ciudad + "', Estado = '" + estado + "', RFC = '" + rfc +
-									  "', FechaNacimiento = '" + fechaNac + "', imagenEmpleado = ' " + imgTrabajador1Loc + "', Sexo = " + sexo +
-									  " WHERE ID = " + f1.idOtroForm + ";";
+					updateDatosEmpleado = "CALL update_EdicionEmpleado(" + nombre + ", " + email + ", " + calle + ", " + colonia + ", " + cp + "," +
+                                        " " + ciudad + ", " + estado + ", " + rfc + ", " + fechaNac + ", " + imgTrabajador1Loc + ", " + sexo + ", " + f1.idOtroForm + ");";
 					try
 					{
 						try
@@ -609,89 +614,89 @@ namespace PruebaA
 
 						catch (Exception)
 						{
-                            //System.Windows.Forms.MessageBox.Show("Algo salió mal al insertar datos del empleado");
                             AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("Algo salió mal al insertar datos del empleado", 3);
                             mens.ShowDialog();
+                            co.Comando("ROLLBACK;");
+                            this.Close();
                         }
 
 						try
 						{
-							co.Comando("DELETE FROM Telefonos WHERE EmpleadoID = " + f1.idOtroForm + ";");
+                            co.Comando("CALL delete_EdicionEmpleado(" + f1.idOtroForm + ");");
 
-							for (int i = 0; i < tablaTels.Rows.Count - 1; i++)
+                            for (int i = 0; i < tablaTels.Rows.Count - 1; i++)
 							{
-								co.Comando("INSERT INTO Telefonos VALUES(" +
-									f1.idOtroForm + ",'" + tablaTels.Rows[i].Cells[0].Value + "');");
-							}
+                                co.Comando("CALL insertTel_EdicionEmpleado(" + f1.idOtroForm + ", '" + tablaTels.Rows[i].Cells[0].Value + "');");
+                            }
 						}
 
 						catch (Exception)
 						{
-                            //System.Windows.Forms.MessageBox.Show("Algo salió mal al editar los teléfonos del empleado");
                             AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("Algo salió mal al editar los teléfonos del empleado", 3);
                             mens.ShowDialog();
+                            co.Comando("ROLLBACK;");
+                            this.Close();
                         }
 
 						try
 						{
-							co.Comando("DELETE FROM Empleado_TipoEmpleado WHERE EmpleadoID = " + f1.idOtroForm + ";");
+                            // co.Comando("DELETE FROM Empleado_TipoEmpleado WHERE EmpleadoID = " + f1.idOtroForm + ";");
+                            co.Comando("CALL delete_e_te(" + f1.idOtroForm + ");");
 
-							for (int i = 0; i < works.Count; i++)
+                            for (int i = 0; i < works.Count; i++)
 							{
 								switch (works[i])
 								{
 									case "Diseñador":
-										co.Comando("INSERT INTO Empleado_TipoEmpleado VALUES((SELECT ID " +
-													 "FROM Empleado WHERE ID = " + f1.idOtroForm + "), " + 1 + ");");
-										break;
+
+                                        //co.Comando("INSERT INTO Empleado_TipoEmpleado VALUES((SELECT ID " +
+										//			 "FROM Empleado WHERE ID = " + f1.idOtroForm + "), " + 1 + ");");
+                                        co.Comando("CALL insert_e_te(" + f1.idOtroForm + ", 1);");
+                                        break;
 
 									case "Editor":
-										co.Comando("INSERT INTO Empleado_TipoEmpleado VALUES((SELECT ID " +
-														 "FROM Empleado WHERE ID = " + f1.idOtroForm + "), " + 2 + ");");
-										break;
+                                        co.Comando("CALL insert_e_te(" + f1.idOtroForm + ", 2);");
+                                        break;
 
 									case "Fotografo":
-										co.Comando("INSERT INTO Empleado_TipoEmpleado VALUES((SELECT ID " +
-														 "FROM Empleado WHERE ID = " + f1.idOtroForm + "), " + 3 + ");");
-										break;
+                                        co.Comando("CALL insert_e_te(" + f1.idOtroForm + ", 3);");
+                                        break;
 
 									case "Maquetador":
-										co.Comando("INSERT INTO Empleado_TipoEmpleado VALUES((SELECT ID " +
-														 "FROM Empleado WHERE ID = " + f1.idOtroForm + "), " + 4 + ");");
-										break;
+                                        co.Comando("CALL insert_e_te(" + f1.idOtroForm + ", 4);");
+                                        break;
 
 									case "Ilustrador":
-										co.Comando("INSERT INTO Empleado_TipoEmpleado VALUES((SELECT ID " +
-														 "FROM Empleado WHERE ID = " + f1.idOtroForm + "), " + 5 + ");");
-										break;
+                                        co.Comando("CALL insert_e_te(" + f1.idOtroForm + ", 5);");
+                                        break;
 
 									case "Imprenta":
 
-										co.Comando("INSERT INTO Empleado_TipoEmpleado VALUES((SELECT ID " +
-														 "FROM Empleado WHERE ID = " + f1.idOtroForm + "), " + 6 + ");");
-										break;
+                                        co.Comando("CALL insert_e_te(" + f1.idOtroForm + ", 6);");
+                                        break;
 
 
 									case "Publicidad":
-										co.Comando("INSERT INTO Empleado_TipoEmpleado VALUES((SELECT ID " +
-														 "FROM Empleado WHERE ID = " + f1.idOtroForm + "), " + 7 + ");");
-										break;
+                                        co.Comando("CALL insert_e_te(" + f1.idOtroForm + ", 7);");
+                                        break;
 								}
 
 							}
 
-                            //System.Windows.Forms.MessageBox.Show("Insercion buena");
-                            AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("Empleado guardado con éxito", 1);
+                            AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("Empleado guardado con éxito", 2);
+                            bmp.Save(imgTrabajador1Loc);
                             mens.ShowDialog();
                             f1.refreshTable();
-							this.Close();
-						}
+                            co.Comando("COMMIT;");
+                            this.Close();
+                        }
 
 						catch (Exception)
-						{
-                            //System.Windows.Forms.MessageBox.Show("No se ha podido editar los datos de los trabajos del empleado");
+						{                          
                             AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No se ha podido editar los datos de los trabajos del empleado", 3);
                             mens.ShowDialog();
+                            co.Comando("ROLLBACK;");
+                            this.Close();
                         }
 
 						try
@@ -701,32 +706,28 @@ namespace PruebaA
 
 						catch (Exception)
 						{
-                            //System.Windows.Forms.MessageBox.Show("Algo salió mal al editar las redes sociales del empleado");
                             AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No se ha podido editar los datos de los trabajos del empleado", 3);
                             mens.ShowDialog();
+                            co.Comando("ROLLBACK;");
+                            this.Close();
                         }
 
 					}
 
 					catch (Exception)
 					{
-                        //System.Windows.Forms.MessageBox.Show("Algo ha salido mal en la inserción de datos del empleado");
                         AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("Algo ha salido mal en la inserción de datos del empleado", 3);
                         mens.ShowDialog();
+                        co.Comando("ROLLBACK;");
+                        this.Close();
                     }
-
-					finally
-					{
-						//if (co != null) co.Cerrar();
-					}
 				}
 			}
 
 			//CASO 3: DATOS INSUFICIENTES
 			else
 			{
-                //System.Windows.Forms.MessageBox.Show("Llene los datos del usuario mínimos: DATOS PERSONALES, TIPO DE EMPLEO Y TELEFONOS");
-                AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("Llene los datos del usuario mínimos: DATOS PERSONALES, TIPO DE EMPLEO Y TELEFONOS", 1);
+                AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("Llene los datos del usuario mínimos: DATOS PERSONALES, TIPO DE EMPLEO Y TELEFONOS", 2);
                 mens.ShowDialog();
             }
 		}
@@ -744,5 +745,11 @@ namespace PruebaA
 			const char Delete = (char)8;
 			e.Handled = !Char.IsDigit(e.KeyChar) && e.KeyChar != Delete;
 		}
-	}
+
+        private void panel1_MouseDown(object sender, MouseEventArgs e)
+        {
+            Funciones.ReleaseCapture();
+            Funciones.SendMessage(this.Handle, 0x112, 0xf012, 0);
+        }
+    }
 }

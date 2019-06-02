@@ -8,7 +8,6 @@ using System.Data;
 
 namespace AppProyectoBD
 {
-    //Hola 
     public class Conexion
     {
         private MySqlConnection conect;

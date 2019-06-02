@@ -115,7 +115,6 @@
             // 
             this.dataGridView1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.dataGridView1.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(63)))), ((int)(((byte)(136)))), ((int)(((byte)(143)))));
-            this.dataGridView1.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleVertical;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(181)))), ((int)(((byte)(181)))));
             dataGridViewCellStyle1.Font = new System.Drawing.Font("Gothic A1", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -173,7 +172,7 @@
             // 
             // dataGridViewTextBoxColumn8
             // 
-            this.dataGridViewTextBoxColumn8.HeaderText = "ENCARGADO ";
+            this.dataGridViewTextBoxColumn8.HeaderText = "FECHA DE ENTREGA";
             this.dataGridViewTextBoxColumn8.Name = "dataGridViewTextBoxColumn8";
             this.dataGridViewTextBoxColumn8.ReadOnly = true;
             this.dataGridViewTextBoxColumn8.Width = 160;
@@ -188,28 +187,31 @@
             this.buscar2.Font = new System.Drawing.Font("Gothic A1", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buscar2.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.buscar2.Image = ((System.Drawing.Image)(resources.GetObject("buscar2.Image")));
-            this.buscar2.Location = new System.Drawing.Point(582, 249);
+            this.buscar2.Location = new System.Drawing.Point(482, 248);
             this.buscar2.Name = "buscar2";
             this.buscar2.Size = new System.Drawing.Size(44, 30);
             this.buscar2.TabIndex = 37;
             this.buscar2.UseVisualStyleBackColor = false;
+            this.buscar2.Click += new System.EventHandler(this.buscar2_Click);
             // 
             // fecha4
             // 
             this.fecha4.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.fecha4.Font = new System.Drawing.Font("Gothic A1", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.fecha4.Location = new System.Drawing.Point(415, 252);
+            this.fecha4.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.fecha4.Location = new System.Drawing.Point(370, 253);
             this.fecha4.Name = "fecha4";
-            this.fecha4.Size = new System.Drawing.Size(152, 21);
+            this.fecha4.Size = new System.Drawing.Size(95, 21);
             this.fecha4.TabIndex = 36;
             // 
             // fecha3
             // 
             this.fecha3.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.fecha3.Font = new System.Drawing.Font("Gothic A1", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.fecha3.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.fecha3.Location = new System.Drawing.Point(257, 252);
             this.fecha3.Name = "fecha3";
-            this.fecha3.Size = new System.Drawing.Size(152, 21);
+            this.fecha3.Size = new System.Drawing.Size(95, 21);
             this.fecha3.TabIndex = 35;
             // 
             // label2
@@ -236,28 +238,31 @@
             this.buscar.Font = new System.Drawing.Font("Gothic A1", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buscar.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.buscar.Image = ((System.Drawing.Image)(resources.GetObject("buscar.Image")));
-            this.buscar.Location = new System.Drawing.Point(582, 24);
+            this.buscar.Location = new System.Drawing.Point(482, 25);
             this.buscar.Name = "buscar";
             this.buscar.Size = new System.Drawing.Size(35, 30);
             this.buscar.TabIndex = 33;
             this.buscar.UseVisualStyleBackColor = false;
+            this.buscar.Click += new System.EventHandler(this.buscar_Click);
             // 
             // fecha2
             // 
             this.fecha2.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.fecha2.Font = new System.Drawing.Font("Gothic A1", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.fecha2.Location = new System.Drawing.Point(415, 28);
+            this.fecha2.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.fecha2.Location = new System.Drawing.Point(370, 29);
             this.fecha2.Name = "fecha2";
-            this.fecha2.Size = new System.Drawing.Size(152, 21);
+            this.fecha2.Size = new System.Drawing.Size(95, 21);
             this.fecha2.TabIndex = 32;
             // 
             // fecha1
             // 
             this.fecha1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.fecha1.Font = new System.Drawing.Font("Gothic A1", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.fecha1.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.fecha1.Location = new System.Drawing.Point(257, 28);
             this.fecha1.Name = "fecha1";
-            this.fecha1.Size = new System.Drawing.Size(152, 21);
+            this.fecha1.Size = new System.Drawing.Size(95, 21);
             this.fecha1.TabIndex = 31;
             // 
             // label1
@@ -335,7 +340,7 @@
             // 
             // dataGridViewTextBoxColumn10
             // 
-            this.dataGridViewTextBoxColumn10.HeaderText = "ENCARGADO ";
+            this.dataGridViewTextBoxColumn10.HeaderText = "FECHA DE ENTREGA";
             this.dataGridViewTextBoxColumn10.Name = "dataGridViewTextBoxColumn10";
             this.dataGridViewTextBoxColumn10.ReadOnly = true;
             this.dataGridViewTextBoxColumn10.Width = 160;
@@ -359,9 +364,10 @@
             this.Controls.Add(this.fecha1);
             this.Controls.Add(this.label1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Trabajos";
             this.Text = "Trabajos";
-            this.Load += new System.EventHandler(this.Trabajos_Load);
+            this.SizeChanged += new System.EventHandler(this.Trabajos_SizeChanged);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             this.ResumeLayout(false);
@@ -382,12 +388,12 @@
         private System.Windows.Forms.DateTimePicker fecha2;
         private System.Windows.Forms.DateTimePicker fecha1;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.DataGridView dataGridView2;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn9;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn6;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn7;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn8;
-        private System.Windows.Forms.DataGridView dataGridView2;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;

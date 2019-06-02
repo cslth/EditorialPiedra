@@ -198,7 +198,7 @@ namespace AppProyectoBD
             }
             else
             {
-                AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No cuenta con los permisos para realizar esta acción", 1);
+                AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No cuenta con los permisos para realizar esta acción", 3);
                 mens.ShowDialog();
             }
         }
@@ -226,7 +226,7 @@ namespace AppProyectoBD
                         MessageBox mens = new MessageBox("¿Seguro que desea eliminar?", 1);
                         mens.ShowDialog();
                         if (aceptar)
-                            co.Comando("CALL PROCEDURE  delete_TipoDeRedSocial(" + ID + ");");
+                            co.Comando("DELETE FROM TipoDeRedSocial WHERE ID = " + ID);
 
                     }
                     else
@@ -242,10 +242,10 @@ namespace AppProyectoBD
                         total = co.Leer.GetInt32(0);
                     if (total == 0)
                     {
-                        MessageBox mens = new MessageBox("¿Seguro que desea eliminar?", 12);
+                        MessageBox mens = new MessageBox("¿Seguro que desea eliminar?", 1);
                         mens.ShowDialog();
                         if (aceptar)
-                            co.Comando("CALL PROCEDURE  delete_TipoTrabajos(" + ID + ");");
+                            co.Comando("DELETE FROM TipoTrabajos WHERE ID = " + ID);
 
                     }
                     else
@@ -256,7 +256,7 @@ namespace AppProyectoBD
                 }
                 if (tipoEmp)
                 {
-                    MessageBox mens = new MessageBox("Los tipos de empleado no se pueden eliminar", 1);
+                    MessageBox mens = new MessageBox("Los tipos de empleado no se pueden eliminar", 3);
                     mens.ShowDialog();
                 }
                 aceptar = false;
@@ -265,7 +265,7 @@ namespace AppProyectoBD
             }
             else
             {
-                AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No cuenta con los permisos para realizar esta acción", 1);
+                AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No cuenta con los permisos para realizar esta acción", 3);
                 mens.ShowDialog();
             }
         }
@@ -281,7 +281,7 @@ namespace AppProyectoBD
             }
             else
             {
-                AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No cuenta con los permisos para realizar esta acción", 1);
+                AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No cuenta con los permisos para realizar esta acción", 3);
                 mens.ShowDialog();
             }
         }
@@ -295,7 +295,7 @@ namespace AppProyectoBD
             }
             else
             {
-                AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No cuenta con los permisos para realizar esta acción", 1);
+                AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No cuenta con los permisos para realizar esta acción", 3);
                 mens.ShowDialog();
             }
         }
@@ -304,10 +304,30 @@ namespace AppProyectoBD
         {
         }
 
-		private void Utilidades_Load(object sender, EventArgs e)
-		{
+        private void Utilidades_SizeChanged(object sender, EventArgs e)
+        {
+            tipoEmpleado.Location = new Point(Convert.ToInt32(Math.Round(this.Width * .0659)), tipoEmpleado.Location.Y);
+            tipoEmpleado.Width = Convert.ToInt32(Math.Round(this.Width * .38311));
+            label1.Location = new Point(Convert.ToInt32(Math.Round(this.Width * .0659)), label1.Location.Y);
 
-		}
-		//------------------------------------------------------------------------
-	}
+            redesSociales.Location = new Point(Convert.ToInt32(Math.Round(this.Width * .0659)), redesSociales.Location.Y);
+            redesSociales.Width = Convert.ToInt32(Math.Round(this.Width * .38311));
+            label4.Location = new Point(Convert.ToInt32(Math.Round(this.Width * .0659)), label4.Location.Y);
+
+            tipoTrabajo.Location = new Point(redesSociales.Location.X + redesSociales.Width + Convert.ToInt32(Math.Round(this.Width * .09375)), tipoTrabajo.Location.Y);
+            tipoTrabajo.Width = Convert.ToInt32(Math.Round(this.Width * .38311));
+            label2.Location = new Point(redesSociales.Location.X + redesSociales.Width + Convert.ToInt32(Math.Round(this.Width * .09375)), label2.Location.Y);
+
+            panel1.Location = new Point(redesSociales.Location.X + redesSociales.Width + Convert.ToInt32(Math.Round(this.Width * .09375)), panel1.Location.Y);
+            panel1.Width = Convert.ToInt32(Math.Round(this.Width * .2754));
+
+            button2.Location = new Point(redesSociales.Location.X + redesSociales.Width - 78, button2.Location.Y);
+            button1.Location = new Point(tipoTrabajo.Location.X + tipoTrabajo.Width - 78, button1.Location.Y);
+            button3.Location = new Point(tipoTrabajo.Location.X + tipoTrabajo.Width - 78, button3.Location.Y);
+            button4.Location = new Point(tipoTrabajo.Location.X + tipoTrabajo.Width - 78, button4.Location.Y);
+
+            richTextBox1.Width = panel1.Width;
+        }
+        //------------------------------------------------------------------------
+    }
 }

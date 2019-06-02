@@ -647,6 +647,7 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1076, 610);
             this.panel1.TabIndex = 122;
+            this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
             // 
             // edicionEmpleado
             // 
@@ -691,6 +692,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "edicionEmpleado";
             this.Text = "edicionEmpleado";
             this.Load += new System.EventHandler(this.edicionEmpleado_Load);

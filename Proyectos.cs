@@ -14,123 +14,95 @@ namespace AppProyectoBD
     public partial class Proyectos : Form
     {
         Conexion co;
-        public Proyectos()
+        public Proyectos(Conexion co)
         {
             InitializeComponent();
-            co = new Conexion();
+            
+            //Conexion
+            this.co = co;
+
+            //Actualiza las tablas
             DatosTablas();
             
         }
         public void DatosTablas()
         {
-            //------------------Mostrar datos en tablas Proyectos ----Proyectos en curso----------------------
-            /*MySqlConnection conect = new MySqlConnection("server=localhost;database=EditorialPiedra;Uid=root;pwd=1016;");
-            MySqlConnection conect2 = new MySqlConnection("server=localhost;database=EditorialPiedra;Uid=root;pwd=1016;");
-
-            MySqlCommand codigo = new MySqlCommand();
-            MySqlCommand codigo2 = new MySqlCommand();
-
-            conect.Open();
-            conect2.Open();
-
-            codigo.Connection = conect;
-            codigo2.Connection = conect2;
-
-
-            codigo.CommandText = ("SELECT * FROM Proyectos WHERE FechaFin > CURDATE();");
-            codigo2.CommandText = ("SELECT COUNT(*) FROM Proyectos WHERE FechaFin > CURDATE();");
-
-
-            MySqlDataReader leer = codigo.ExecuteReader();
-            MySqlDataReader leer2 = codigo2.ExecuteReader();
-
-
-            int rows = 0;
-            if (leer2.Read())
-                rows = leer2.GetInt32(0);
-
-            if (rows == 0)
-                rows = 1;
-
-            int i = 0;
-            dataGridView1.RowCount = rows;
-            while (leer.Read())
-            {
-                dataGridView1[0, i].Value = leer.GetInt32(0);
-                dataGridView1[1, i].Value = leer.GetString(1);
-                dataGridView1[2, i].Value = leer.GetDateTime(3);
-                dataGridView1[3, i].Value = leer.GetDateTime(4);
-                dataGridView1[4, i].Value = leer.GetString(5);
-                i++;
-            }*/
-            co.Comando("SELECT COUNT(*) FROM Proyectos WHERE FechaFin > CURDATE();");
+           //Cuento los proyectos vigentes
+            co.Comando("SELECT COUNT(*) FROM Proyectos WHERE FechaFin >= CURDATE();");
             int rows = 0;
             if (co.LeerRead)
                 rows = co.Leer.GetInt32(0);
 
             if (rows == 0)
-                rows = 1;
+            {
+                dataGridView1.RowCount = 1;
+                dataGridView1[0, 0].Value = "";
+                dataGridView1[1, 0].Value = "";
+                dataGridView1[2, 0].Value = "";
+                dataGridView1[3, 0].Value = "";
+                dataGridView1[4, 0].Value = "";
 
-            co.Comando("SELECT * FROM Proyectos WHERE FechaFin > CURDATE();");
+            }
+            else
+            {
+                dataGridView1.RowCount = rows;
+            }
+                
+            
+
+            //Selecciono todos sus datos y los coloco en el dataGridView1
+            co.Comando("SELECT * FROM Proyectos WHERE FechaFin >= CURDATE();");
             int i = 0;
-            dataGridView1.RowCount = rows;
+
             while (co.LeerRead)
             {
                 dataGridView1[0, i].Value = co.Leer.GetInt32(0);
                 dataGridView1[1, i].Value = co.Leer.GetString(1);
-                dataGridView1[2, i].Value = co.Leer.GetDateTime(3);
-                dataGridView1[3, i].Value = co.Leer.GetDateTime(4);
+                dataGridView1[2, i].Value = co.Leer.GetMySqlDateTime(3);
+                dataGridView1[3, i].Value = co.Leer.GetMySqlDateTime(4);
                 dataGridView1[4, i].Value = co.Leer.GetString(5);
                 i++;
             }
-            
 
-                //------------------Mostrar datos en tablas Proyectos ----Proyectos pasados----------------------
 
-            MySqlConnection conect3 = new MySqlConnection("server=localhost;database=EditorialPiedra;Uid=root;pwd=334920179;");
-            MySqlConnection conect4 = new MySqlConnection("server=localhost;database=EditorialPiedra;Uid=root;pwd=334920179;");
-
-            MySqlCommand codigo3 = new MySqlCommand();
-            MySqlCommand codigo4 = new MySqlCommand();
-
-            conect3.Open();
-            conect4.Open();
-
-            codigo3.Connection = conect3;
-            codigo4.Connection = conect4;
-
-            codigo3.CommandText = ("SELECT * FROM Proyectos WHERE FechaFin <= CURDATE();");
-            codigo4.CommandText = ("SELECT COUNT(*) FROM Proyectos WHERE FechaFin <= CURDATE();");
-
-            MySqlDataReader leer3 = codigo3.ExecuteReader();
-            MySqlDataReader leer4 = codigo4.ExecuteReader();
-
+            //------------------Mostrar datos en tablas Proyectos ----Proyectos pasados----------------------
+            //Cuento los proyectos pasados 
+            co.Comando("SELECT COUNT(*) FROM Proyectos WHERE FechaFin < CURDATE();");
             rows = 0;
-            if (leer4.Read())
-                rows = leer4.GetInt32(0);
+            if (co.LeerRead)
+                rows = co.Leer.GetInt32(0);
 
             if (rows == 0)
-                rows = 1;
-
-            i = 0;
-            dataGridView2.RowCount = rows;
-            while (leer3.Read())
             {
-                dataGridView2[0, i].Value = leer3.GetInt32(0);
-                dataGridView2[1, i].Value = leer3.GetString(1);
-                dataGridView2[2, i].Value = leer3.GetDateTime(3);
-                dataGridView2[3, i].Value = leer3.GetDateTime(4);
-                dataGridView2[4, i].Value = leer3.GetString(5);
-                i++;
+                dataGridView2.RowCount = 1;
+                dataGridView2[0, 0].Value = "";
+                dataGridView2[1, 0].Value = "";
+                dataGridView2[2, 0].Value = "";
+                dataGridView2[3, 0].Value = "";
+                dataGridView2[4, 0].Value = "";
+
+            }
+            else
+            {
+                dataGridView2.RowCount = rows;
             }
 
-            //conect.Close();
-            //conect2.Close();
-            co.Cerrar();
-            conect3.Close();
-            conect4.Close();
-            //------------------------------------------------------------------------------
+            i = 0;
+            
 
+            //Selecciono todos sus datos y los coloco en el dataGridView
+            co.Comando("SELECT * FROM Proyectos WHERE FechaFin < CURDATE();");
+            while (co.LeerRead)
+            {
+                dataGridView2[0, i].Value = co.Leer.GetInt32(0);
+                dataGridView2[1, i].Value = co.Leer.GetString(1);
+                dataGridView2[2, i].Value = co.Leer.GetMySqlDateTime(3);
+                dataGridView2[3, i].Value = co.Leer.GetMySqlDateTime(4);
+                dataGridView2[4, i].Value = co.Leer.GetString(5);
+                i++;
+            }
+       
+            //------------------------------------------------------------------------------
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -140,14 +112,24 @@ namespace AppProyectoBD
 
         private void button2_Click(object sender, EventArgs e)
         {
+            //Visualizar un proyecto existente
             try
             {
-                Form visuaProy = new VisuaProyecto((int)dataGridView1[0,dataGridView1.CurrentCell.RowIndex].Value,1);
-                visuaProy.ShowDialog();
+                //Comprueba que la cadena no sea nula
+                if (!dataGridView1[0, dataGridView1.CurrentCell.RowIndex].Value.Equals(""))
+                {
+                    Form visuaProy = new VisuaProyecto(this,co, (int)dataGridView1[0, dataGridView1.CurrentCell.RowIndex].Value, 1);
+                    visuaProy.ShowDialog();
+                }
+                else
+                {
+                    Form mensaje = new MessageBox("No hay proyectos que mostrar", 2);
+                    mensaje.ShowDialog();
+                }
             }
             catch (System.NullReferenceException)
             {
-                Form mensaje = new MessageBox("Seleccione un proyecto");
+                MessageBox mensaje = new MessageBox("Seleccione un proyecto",2);
                 mensaje.ShowDialog();
             }
            
@@ -156,8 +138,17 @@ namespace AppProyectoBD
 
         private void button3_Click(object sender, EventArgs e)
         {
-            Form visuaProy = new VisuaProyecto(0, 2);
-            visuaProy.ShowDialog();
+            if (co.permiso.Equals(co.administrador))
+            {
+                //Agergar un proyecto nuevo
+                Form visuaProy = new VisuaProyecto(this,co, 0, 2);
+                visuaProy.ShowDialog();
+            }
+            else
+            {
+                AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No cuenta con los permisos para realizar esta acción", 3);
+                mens.ShowDialog();
+            }
         }
 
         private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -169,131 +160,84 @@ namespace AppProyectoBD
             //Visualizar(Le mando el id del proyecto)
             try
             {
-                Form visuaProy = new VisuaProyecto((int)dataGridView2[ 0, dataGridView2.CurrentCell.RowIndex].Value, 1);
-                visuaProy.ShowDialog();
+                //Comprueba que la cadena no sea nula
+                if (!dataGridView2[0, dataGridView2.CurrentCell.RowIndex].Value.Equals(""))
+                {
+                    Form visuaProy = new VisuaProyecto(this,co, (int)dataGridView2[0, dataGridView2.CurrentCell.RowIndex].Value, 1);
+                    visuaProy.ShowDialog();
+                }
+                else
+                {
+                    Form mensaje = new MessageBox("No hay proyectos que mostrar", 2);
+                    mensaje.ShowDialog();
+                }
             }
             catch (System.NullReferenceException)
             {
-                Form mensaje = new MessageBox("Seleccione un proyecto");
+                Form mensaje = new MessageBox("Seleccione un proyecto",2);
                 mensaje.ShowDialog();
             }
         }
 
         private void buscar_Click(object sender, EventArgs e)
         {
-            //------------------Mostrar datos en tablas Proyectos (en curso)----Realizando busqueda entre fechas----------------------
-            MySqlConnection conect = new MySqlConnection("server=localhost;database=EditorialPiedra;Uid=root;pwd=1016;");
-            MySqlConnection conect2 = new MySqlConnection("server=localhost;database=EditorialPiedra;Uid=root;pwd=1016;");
+            string fechaA = fecha1.Value.Date.ToString("yyyy-MM-dd");
 
-            MySqlCommand codigo = new MySqlCommand();
-            MySqlCommand codigo2 = new MySqlCommand();
+            string fechaB = fecha2.Value.Date.ToString("yyyy-MM-dd");
 
-            conect.Open();
-            conect2.Open();
+            buscarProyecto(fechaA, fechaB, dataGridView1, 1);
 
-            codigo.Connection = conect;
-            codigo2.Connection = conect2;
-
-            string fechaInicio = fecha1.Text;
-            string año = fechaInicio.Substring(6, 4);
-            string mes = fechaInicio.Substring(2, 4);
-            string dia = fechaInicio.Substring(0, 2);
-            string fechaA = año + mes + dia;
-
-            string fechaFin = fecha2.Text;
-            string año2 = fechaFin.Substring(6, 4);
-            string mes2 = fechaFin.Substring(2, 4);
-            string dia2 = fechaFin.Substring(0, 2);
-            string fechaB = año2 + mes2 + dia2;
-
-            codigo.CommandText = ("SELECT * FROM Proyectos WHERE FechaFin between '"+fechaA+"' AND '"+fechaB+"';");
-            codigo2.CommandText = ("SELECT COUNT(*) FROM Proyectos WHERE FechaFin  between '" + fechaA + "' AND '" + fechaB + "';");
-
-
-            MySqlDataReader leer = codigo.ExecuteReader();
-            MySqlDataReader leer2 = codigo2.ExecuteReader();
-
-
+        }
+        private void buscarProyecto(string fechaA, string fechaB, DataGridView dataGridView, int sel)
+        {
+            //Selecciono el simbolo correcto
+            string simbolo = "";
+            if (sel == 1)
+                simbolo = ">=";
+            else
+                simbolo = "<";
+            //Cuento los proyectos que se hayan encontrado segun el caso
+            co.Comando("SELECT COUNT(*) FROM Proyectos WHERE FechaFin "+simbolo+" CURDATE() AND FechaFin between '" + fechaA + "' AND '" + fechaB + "';");
             int rows = 0;
-            if (leer2.Read())
-                rows = leer2.GetInt32(0);
+            if (co.LeerRead)
+                rows = co.Leer.GetInt32(0);
 
-            if (rows == 0)
-                rows = 1;
-
-            int i = 0;
-            dataGridView1.RowCount = rows;
-            while (leer.Read())
+            if (rows > 0)
+                dataGridView.RowCount = rows;
+            else
             {
-                dataGridView1[0, i].Value = leer.GetInt32(0);
-                dataGridView1[1, i].Value = leer.GetString(1);
-                dataGridView1[2, i].Value = leer.GetDateTime(3);
-                dataGridView1[3, i].Value = leer.GetDateTime(4);
-                dataGridView1[4, i].Value = leer.GetString(5);
+                dataGridView.RowCount = 1;
+                dataGridView[0, 0].Value = "";
+                dataGridView[1, 0].Value = "";
+                dataGridView[2, 0].Value = "";
+                dataGridView[3, 0].Value = "";
+                dataGridView[4, 0].Value = "";
+            }
+
+            //Selecciono la info de tales proyectos
+            co.Comando("SELECT * FROM Proyectos WHERE  FechaFin " + simbolo + " CURDATE() AND FechaFin between '" + fechaA + "' AND '" + fechaB + "';");
+            int i = 0;
+            while (co.LeerRead)
+            {
+                dataGridView[0, i].Value = co.Leer.GetInt32(0);
+                dataGridView[1, i].Value = co.Leer.GetString(1);
+                dataGridView[2, i].Value = co.Leer.GetMySqlDateTime(3);
+                dataGridView[3, i].Value = co.Leer.GetMySqlDateTime(4);
+                dataGridView[4, i].Value = co.Leer.GetString(5);
                 i++;
             }
 
-            conect.Close();
-            conect2.Close();
 
         }
 
         private void buscar2_Click(object sender, EventArgs e)
         {
-            //------------------Mostrar datos en tablas Proyectos(finalizados)----Realizando busqueda entre fechas----------------------
-            MySqlConnection conect = new MySqlConnection("server=localhost;database=EditorialPiedra;Uid=root;pwd=1016;");
-            MySqlConnection conect2 = new MySqlConnection("server=localhost;database=EditorialPiedra;Uid=root;pwd=1016;");
 
-            MySqlCommand codigo = new MySqlCommand();
-            MySqlCommand codigo2 = new MySqlCommand();
+            string fechaA = fecha3.Value.Date.ToString("yyyy-MM-dd");
 
-            conect.Open();
-            conect2.Open();
+            string fechaB = fecha4.Value.Date.ToString("yyyy-MM-dd");
 
-            codigo.Connection = conect;
-            codigo2.Connection = conect2;
-
-            string fechaInicio = fecha2.Text;
-            string año = fechaInicio.Substring(6, 4);
-            string mes = fechaInicio.Substring(2, 4);
-            string dia = fechaInicio.Substring(0, 2);
-            string fechaA = año + mes + dia;
-
-            string fechaFin = fecha3.Text;
-            string año2 = fechaFin.Substring(6, 4);
-            string mes2 = fechaFin.Substring(2, 4);
-            string dia2 = fechaFin.Substring(0, 2);
-            string fechaB = año2 + mes2 + dia2;
-
-            codigo.CommandText = ("SELECT * FROM Proyectos WHERE FechaFin between '" + fechaA + "' AND '" + fechaB + "';");
-            codigo2.CommandText = ("SELECT COUNT(*) FROM Proyectos WHERE FechaFin  between '" + fechaA + "' AND '" + fechaB + "';");
-
-
-            MySqlDataReader leer = codigo.ExecuteReader();
-            MySqlDataReader leer2 = codigo2.ExecuteReader();
-
-
-            int rows = 0;
-            if (leer2.Read())
-                rows = leer2.GetInt32(0);
-
-            if (rows == 0)
-                rows = 1;
-
-            int i = 0;
-            dataGridView1.RowCount = rows;
-            while (leer.Read())
-            {
-                dataGridView2[0, i].Value = leer.GetInt32(0);
-                dataGridView2[1, i].Value = leer.GetString(1);
-                dataGridView2[2, i].Value = leer.GetDateTime(3);
-                dataGridView2[3, i].Value = leer.GetDateTime(4);
-                dataGridView2[4, i].Value = leer.GetString(5);
-                i++;
-            }
-
-            conect.Close();
-            conect2.Close();
+            buscarProyecto(fechaA, fechaB, dataGridView2, 2);
 
         }
 
@@ -302,9 +246,20 @@ namespace AppProyectoBD
             this.Refresh();
         }
 
-		private void Proyectos_Load(object sender, EventArgs e)
-		{
+        private void Proyectos_SizeChanged(object sender, EventArgs e)
+        {
+            label1.Location = new Point(43, label1.Location.Y);
+            dataGridView1.Location = new Point(43, dataGridView1.Location.Y);
+            dataGridView1.Width = this.Width - 94;
 
-		}
-	}
+            label2.Location = new Point(43, label2.Location.Y);
+            dataGridView2.Location = new Point(43, dataGridView2.Location.Y);
+            dataGridView2.Width = this.Width - 94;
+
+            butVisua.Location = new Point(this.Width - 197, butVisua.Location.Y);
+            butVisua2.Location = new Point(this.Width - 197, butVisua2.Location.Y);
+
+            button3.Location = new Point(this.Width - 92, button3.Location.Y);
+        }
+    }
 }
