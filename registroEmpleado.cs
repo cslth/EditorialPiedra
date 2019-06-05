@@ -31,6 +31,7 @@ namespace PruebaA
         //Variables
         public bool resultado1 = false;
         Bitmap bmp;
+        bool hayImagen = false;
         //public bool resultado2 = false;
 
         public registroEmpleado(Empleados form, Conexion co)
@@ -152,6 +153,7 @@ namespace PruebaA
 			{
                 Bitmap orig = new Bitmap(Path.GetFullPath(seleccion.FileName).Replace(@"\", @"\\"));
                 bmp = new Bitmap(Redimensionar(orig, 270, 270));
+                hayImagen = true;
                 imgTrab1.Image = bmp;
                 label13.Visible = false;
 				label2.Visible = false;
@@ -170,6 +172,7 @@ namespace PruebaA
                 Bitmap orig = new Bitmap(Path.GetFullPath(seleccion.FileName).Replace(@"\", @"\\"));
                 bmp = new Bitmap(Redimensionar(orig, 270, 270));
                 imgTrab1.Image = bmp;
+                hayImagen = true;
 				label13.Visible = false;
 				label2.Visible = false;
 			}
@@ -209,7 +212,7 @@ namespace PruebaA
             string destino = Path.Combine("C:\\Imagenes\\","imagen"+(IdEmp+1)+".jpeg").Replace(@"\", @"\\");
 
             //CASO 1: TENER LOS DATOS
-            if (textos && telefonos && redes && worksL)
+            if (textos && telefonos && redes && worksL && hayImagen)
 			{
 					nombre = tbNombre.Text;
 					email = tbEmail.Text;
@@ -359,7 +362,7 @@ namespace PruebaA
 			}
 			
 			//CASO 2: SIN REDES SOCIALES
-			else if (textos && telefonos && redes == false && worksL)
+			else if (textos && telefonos && redes == false && worksL && hayImagen)
 			{
                 AppProyectoBD.MessageBox res = new AppProyectoBD.MessageBox("¿Está seguro de que quiere continuar sin redes sociales?", 1);
                 res.ShowDialog();
@@ -631,5 +634,10 @@ namespace PruebaA
             Funciones.ReleaseCapture();
             Funciones.SendMessage(this.Handle, 0x112, 0xf012, 0);
         }
-    }
+
+		private void panel1_Paint(object sender, PaintEventArgs e)
+		{
+
+		}
+	}
 }
