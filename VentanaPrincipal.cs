@@ -58,7 +58,7 @@ namespace Inicio
             // Realizo la consulta para obtener los ID's de los empleados activos
             co.Comando("SELECT DISTINCT E.ID " +
                 "FROM Empleado AS E WHERE E.ID IN (SELECT ET.EmpleadoID FROM Empleado_Trabajos as ET, Trabajos as T " +
-                                                    "WHERE ADDDATE(T.FechaEntrega, T.TiempoEntrega) > CURDATE());");
+                                                    "WHERE T.FechaFin > CURDATE());");
 
             // Guardo en un arreglo los ID's
             while (co.LeerRead)
@@ -122,9 +122,6 @@ namespace Inicio
                         TextAlign = ContentAlignment.MiddleCenter,
                     };
 
-                    // -------------------------------
-
-                    // -------------------------------
 
                     // Nombre del proyecto en el que está participando el empleado
                     Label labelP = new Label
@@ -135,9 +132,6 @@ namespace Inicio
                         TextAlign = ContentAlignment.MiddleCenter,
                     };
 
-                    // -------------------------------
-
-                    //--------------------------------
 
                     // Código para cortar una imagen y dejarla en círculo
                     int radio = 110, x = 135, y = 135;
@@ -172,14 +166,12 @@ namespace Inicio
                         Cursor = Cursors.Hand
                     };
 
-                    //
                     label1 = panel.labelNombre;
                     ajustarLabels();
                     label1 = panel.labelTrabajo;
                     ajustarLabels();
                     label1 = panel.labelProyecto;
                     ajustarLabels();
-                    //
 
                     // Se añade el panel ya preparado al carrusel
                     flowLayoutPanel1.Controls.Add(panel);
@@ -198,7 +190,7 @@ namespace Inicio
             labels = 0;
 
             // Consulta para obtener la cantidad de trabajos activos en el momento
-            co.Comando("SELECT COUNT(*) FROM Trabajos WHERE ADDDATE(FechaEntrega, TiempoEntrega) > CURDATE();");
+            co.Comando("SELECT COUNT(*) FROM Trabajos WHERE FechaFin > CURDATE();");
 
             int paneles = 0;
             if (co.LeerRead)
@@ -210,7 +202,7 @@ namespace Inicio
                 ID.Clear();
                 // Solamente se mostrará el nombre del trabajo y se mostrará en un panel
                 // Se añade el ID al arreglo para accesar luego a su información si es necesario
-                co.Comando("SELECT ID, Nombre FROM Trabajos WHERE ADDDATE(FechaEntrega, TiempoEntrega) > CURDATE();");
+                co.Comando("SELECT ID, Nombre FROM Trabajos WHERE FechaFin > CURDATE();");
                 for (int i = 0; i < paneles; i++)
                 {
                     if (co.LeerRead)
@@ -261,12 +253,12 @@ namespace Inicio
             // Se ignorará la información del ID pues no es necesaria para el usuario
             labelProy.Text = "Proyecto:\n";
             labelEncargados.Text = "Encargados: ";
-            labelFechas.Text = "Periodo:\n";
+            labelFechas.Text = "Período:\n";
             labelDias.Text = "Tiempo restante:\n";
             labelDescripcion.Text = "Descripción:\n";
 
-            co.Comando("SELECT T.Nombre, T.Descripcion, CONCAT(DATE_FORMAT(ADDDATE(T.FechaEntrega, INTERVAL - T.TiempoEntrega DAY), '%d/%m/%Y'), ' - ', DATE_FORMAT(T.FechaEntrega, '%d/%m/%Y')) AS Fechas, " +
-                       "DATEDIFF(T.FechaEntrega, CURDATE()) AS Dias, GROUP_CONCAT('\n', E.Nombre) AS Encargados " +
+            co.Comando("SELECT T.Nombre, T.Descripcion, CONCAT(date_format(T.FechaInicio,'%d/%m/%Y'), ' - ', date_format(T.FechaFin,'%d/%m/%Y')) AS Fechas, " +
+                       "DATEDIFF(T.FechaFin, CURDATE()) AS Dias, GROUP_CONCAT('\n', E.Nombre) AS Encargados " +
                        "FROM Trabajos as T, Empleado as E, Empleado_Trabajos as ET " +
                        "WHERE E.ID = ET.EmpleadoID AND ET.TrabajosID = T.ID AND T.ID = "+trabajoActivo+";");
 
@@ -277,7 +269,7 @@ namespace Inicio
                 labelDescripcion.Text += co.Leer.GetString(1);
                 labelFechas.Text += co.Leer.GetString(2);
                 dias = co.Leer.GetInt32(3);
-                labelDias.Text += dias + (dias>1?" dias":" dia");
+                labelDias.Text += dias + (dias>1?" días":" día");
                 labelEncargados.Text += co.Leer.GetString(4);
                 
             }
@@ -299,7 +291,7 @@ namespace Inicio
             }
             else
             {
-                labelProy.Text += "Este trabajo no pertenece a ningun proyecto";
+                labelProy.Text += "Este trabajo no pertenece a ningún proyecto";
             }
 
             // Aquí se ajusta el tamaño de la fuente de la label si es necesario
@@ -376,7 +368,7 @@ namespace Inicio
         {
             // Se realiza una consulta para obtener el nombre, descripción, fechas de inicio y fin, encargado
             // del proyecto elegido en el flowLayoutPanel2
-            labelFechas.Text = "Periodo:\n";
+            labelFechas.Text = "Período:\n";
             labelDias.Text = "Tiempo restante:\n";
             labelDescripcion.Text = "Descripción:\n";
 

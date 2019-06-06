@@ -67,7 +67,8 @@ namespace AppProyectoBD
                     //Si es opcion 1 se inserta en TipoTrabajos
                     if (opc == 1)
                     {
-                        co.Comando("INSERT INTO TipoTrabajos (NombreTipoTrab,DescripcionTrab) VALUES('" + nombre.Text + "','" + descripcion.Text + "');");
+                        //co.Comando("INSERT INTO TipoTrabajos (NombreTipoTrab,DescripcionTrab) VALUES('" + nombre.Text + "','" + descripcion.Text + "');");
+                        co.Comando("INSERT INTO TipoTrabajos (NombreTipoTrab,DescripcionTrab, ses_id) VALUES('" + nombre.Text + "','" + descripcion.Text + "', "+co.sesion+");");
                     }
     
                 }
@@ -76,12 +77,14 @@ namespace AppProyectoBD
                     //Si es opcion 1 se actualiza TipoTrabajos
                     if (opc == 1)
                     {
-                        co.Comando("UPDATE TipoTrabajos SET NombreTipoTrab = '" + nombre.Text + "', DescripcionTrab = '" + descripcion.Text + "' WHERE ID = "+ID+";");
+                        // co.Comando("UPDATE TipoTrabajos SET NombreTipoTrab = '" + nombre.Text + "', DescripcionTrab = '" + descripcion.Text + "' WHERE ID = "+ID+";");
+                        co.Comando("UPDATE TipoTrabajos SET NombreTipoTrab = '" + nombre.Text + "', DescripcionTrab = '" + descripcion.Text + "', ses_id = "+co.sesion+" WHERE ID = " + ID + ";");
                     }
                     //Si es opcion 2 se actualiza TipoEmpleado
                     else
                     {
-                        co.Comando("UPDATE TipoEmpleado SET Descripcion = '" + descripcion.Text + "' WHERE ID = "+ID+";");
+                        // co.Comando("UPDATE TipoEmpleado SET Descripcion = '" + descripcion.Text + "' WHERE ID = "+ID+";");
+                        co.Comando("UPDATE TipoEmpleado SET Descripcion = '" + descripcion.Text + "', ses_id = "+co.sesion+" WHERE ID = " + ID + ";");
                     }
                 }
                 //Se actualizan los datos de las tablas del frame Utilidades

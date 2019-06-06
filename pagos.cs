@@ -298,7 +298,7 @@ namespace AppProyectoBD
                 co.Comando("SELECT COUNT(*) FROM Empleado AS e " +
                            "INNER JOIN Pago_Empleado_Trabajos AS pet ON(pet.EmpleadoID = e.ID) " +
                            "INNER JOIN PagoProgramado AS p ON(pet.PagoProgramadoID = p.ID) " +
-                           "WHERE e.Nombre LIKE '" + empleado.Text + "%' AND p.NumTotalPagos " + simbolo + " 0; ");
+                           "WHERE e.Nombre LIKE @Empleado AND p.NumTotalPagos " + simbolo + " 0; ", "@Empleado",empleado.Text+"%");
                 if (co.LeerRead)
                     reng = co.Leer.GetInt32(0);
                 if (reng > 0)
@@ -313,7 +313,7 @@ namespace AppProyectoBD
                                "INNER JOIN PagoProgramado AS p ON(pet.PagoProgramadoID = p.ID) " +
                                "INNER JOIN Trabajos AS t ON(t.ID = pet.TrabajosID) " +
                                "LEFT OUTER JOIN Proyectos AS pro ON(pro.ID = t.ProyectosID) " +
-                               "WHERE e.Nombre LIKE '" + empleado.Text + "%' AND p.NumTotalPagos "+simbolo+" 0");
+                               "WHERE e.Nombre LIKE  @Empleado AND p.NumTotalPagos " + simbolo+" 0", "@Empleado", empleado.Text + "%");
                     int i = 0;
                     while (co.LeerRead)
                     {
@@ -445,7 +445,7 @@ namespace AppProyectoBD
                            "FROM Trabajos AS t " +
                            "INNER JOIN Pago_Empleado_Trabajos AS pet ON(pet.TrabajosID = t.ID) " +
                            "INNER JOIN PagoProgramado AS p ON(pet.PagoProgramadoID = p.ID) " +
-                           "WHERE t.Nombre LIKE '" + trabajo.Text + "%' AND p.NumTotalPagos " + simbolo + " 0");
+                           "WHERE t.Nombre LIKE @Trabajo AND p.NumTotalPagos " + simbolo + " 0","@Trabajo",trabajo.Text+"%");
                 if (co.LeerRead)
                     reng = co.Leer.GetInt32(0);
                 if (reng > 0)
@@ -460,7 +460,7 @@ namespace AppProyectoBD
                                "INNER JOIN PagoProgramado AS p ON(pet.PagoProgramadoID = p.ID) " +
                                "INNER JOIN Trabajos AS t ON(t.ID = pet.TrabajosID) " +
                                "LEFT OUTER JOIN Proyectos AS pro ON(pro.ID = t.ProyectosID) " +
-                               "WHERE t.Nombre LIKE '" + trabajo.Text + "%' AND p.NumTotalPagos " + simbolo + " 0");
+                               "WHERE t.Nombre LIKE @Trabajo AND p.NumTotalPagos " + simbolo + " 0","@Trabajo",trabajo.Text+"%");
                     int i = 0;
                     while (co.LeerRead)
                     {

@@ -42,12 +42,14 @@ namespace AppProyectoBD
                 //En caso de no estar editando, solo se hace un INSERT, caso contrario se hace un UPDATE
                 if (!editar)
                 {
-                    co.Comando("INSERT INTO TipoDeRedSocial (NombreRedSocial) VALUES('" + nombre.Text + "');");
+                    // co.Comando("INSERT INTO TipoDeRedSocial (NombreRedSocial) VALUES('" + nombre.Text + "');");
+                    co.Comando("INSERT INTO TipoDeRedSocial (NombreRedSocial, ses_id) VALUES('" + nombre.Text + "', "+co.sesion+");");
 
                 }
                 else
                 {
-                    co.Comando("UPDATE TipoDeRedSocial SET NombreRedSocial = '" + nombre.Text + "' WHERE ID = " + ID + ";");
+                    // co.Comando("UPDATE TipoDeRedSocial SET NombreRedSocial = '" + nombre.Text + "' WHERE ID = " + ID + ";");
+                    co.Comando("UPDATE TipoDeRedSocial SET NombreRedSocial = '" + nombre.Text + "', ses_id = "+co.sesion+" WHERE ID = " + ID + ";");
                 }
                 //Se actualizan los datos de las tablas del frame Utilidades
                 Utilidades frm2 = Application.OpenForms.OfType<Utilidades>().FirstOrDefault();
