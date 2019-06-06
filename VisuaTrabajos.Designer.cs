@@ -32,9 +32,6 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(VisuaTrabajos));
             this.panel1 = new System.Windows.Forms.Panel();
-            this.año = new System.Windows.Forms.RadioButton();
-            this.mes = new System.Windows.Forms.RadioButton();
-            this.dias = new System.Windows.Forms.RadioButton();
             this.editarEncargados = new System.Windows.Forms.Button();
             this.PrograPago = new System.Windows.Forms.Button();
             this.AgreEmpleado = new System.Windows.Forms.Button();
@@ -44,7 +41,6 @@
             this.dataGridViewTextBoxColumn5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.comboBox3 = new System.Windows.Forms.ComboBox();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
-            this.Tentrega = new System.Windows.Forms.TextBox();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.butCerrar = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
@@ -54,13 +50,16 @@
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.textNombre = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.panel7 = new System.Windows.Forms.Panel();
             this.label6 = new System.Windows.Forms.Label();
             this.butGuardar = new System.Windows.Forms.Button();
             this.cancelar = new System.Windows.Forms.Button();
+            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
+            this.dateTimePicker2 = new System.Windows.Forms.DateTimePicker();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.panel7.SuspendLayout();
@@ -70,9 +69,10 @@
             // 
             this.panel1.BackColor = System.Drawing.Color.Transparent;
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel1.Controls.Add(this.año);
-            this.panel1.Controls.Add(this.mes);
-            this.panel1.Controls.Add(this.dias);
+            this.panel1.Controls.Add(this.label9);
+            this.panel1.Controls.Add(this.label8);
+            this.panel1.Controls.Add(this.dateTimePicker2);
+            this.panel1.Controls.Add(this.dateTimePicker1);
             this.panel1.Controls.Add(this.editarEncargados);
             this.panel1.Controls.Add(this.PrograPago);
             this.panel1.Controls.Add(this.AgreEmpleado);
@@ -80,7 +80,6 @@
             this.panel1.Controls.Add(this.dataGridView1);
             this.panel1.Controls.Add(this.comboBox3);
             this.panel1.Controls.Add(this.comboBox2);
-            this.panel1.Controls.Add(this.Tentrega);
             this.panel1.Controls.Add(this.comboBox1);
             this.panel1.Controls.Add(this.butCerrar);
             this.panel1.Controls.Add(this.label7);
@@ -90,7 +89,6 @@
             this.panel1.Controls.Add(this.richTextBox1);
             this.panel1.Controls.Add(this.textNombre);
             this.panel1.Controls.Add(this.label5);
-            this.panel1.Controls.Add(this.label3);
             this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Controls.Add(this.panel7);
@@ -100,47 +98,9 @@
             this.panel1.Font = new System.Drawing.Font("Gothic A1", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(730, 330);
+            this.panel1.Size = new System.Drawing.Size(730, 346);
             this.panel1.TabIndex = 29;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
-            // 
-            // año
-            // 
-            this.año.AutoSize = true;
-            this.año.Font = new System.Drawing.Font("Gothic A1", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.año.Location = new System.Drawing.Point(311, 230);
-            this.año.Name = "año";
-            this.año.Size = new System.Drawing.Size(48, 23);
-            this.año.TabIndex = 60;
-            this.año.TabStop = true;
-            this.año.Text = "año";
-            this.año.UseVisualStyleBackColor = true;
-            // 
-            // mes
-            // 
-            this.mes.AutoSize = true;
-            this.mes.Font = new System.Drawing.Font("Gothic A1", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.mes.Location = new System.Drawing.Point(258, 230);
-            this.mes.Name = "mes";
-            this.mes.Size = new System.Drawing.Size(50, 23);
-            this.mes.TabIndex = 59;
-            this.mes.TabStop = true;
-            this.mes.Text = "Mes";
-            this.mes.UseVisualStyleBackColor = true;
-            this.mes.CheckedChanged += new System.EventHandler(this.mes_CheckedChanged);
-            // 
-            // dias
-            // 
-            this.dias.AutoSize = true;
-            this.dias.Checked = true;
-            this.dias.Font = new System.Drawing.Font("Gothic A1", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dias.Location = new System.Drawing.Point(204, 230);
-            this.dias.Name = "dias";
-            this.dias.Size = new System.Drawing.Size(51, 23);
-            this.dias.TabIndex = 58;
-            this.dias.TabStop = true;
-            this.dias.Text = "Dias";
-            this.dias.UseVisualStyleBackColor = true;
             // 
             // editarEncargados
             // 
@@ -162,7 +122,7 @@
             this.PrograPago.FlatAppearance.BorderColor = System.Drawing.Color.DarkGray;
             this.PrograPago.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.PrograPago.Font = new System.Drawing.Font("Gothic A1", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.PrograPago.Location = new System.Drawing.Point(600, 285);
+            this.PrograPago.Location = new System.Drawing.Point(600, 301);
             this.PrograPago.Name = "PrograPago";
             this.PrograPago.Size = new System.Drawing.Size(110, 32);
             this.PrograPago.TabIndex = 55;
@@ -214,7 +174,7 @@
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.dataGridViewTextBoxColumn9,
             this.dataGridViewTextBoxColumn5});
-            this.dataGridView1.Location = new System.Drawing.Point(360, 86);
+            this.dataGridView1.Location = new System.Drawing.Point(360, 81);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(228)))), ((int)(((byte)(238)))), ((int)(((byte)(238)))));
@@ -253,25 +213,17 @@
             // comboBox2
             // 
             this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(167, 188);
+            this.comboBox2.Location = new System.Drawing.Point(149, 189);
             this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(187, 25);
+            this.comboBox2.Size = new System.Drawing.Size(205, 25);
             this.comboBox2.TabIndex = 49;
-            // 
-            // Tentrega
-            // 
-            this.Tentrega.Location = new System.Drawing.Point(167, 229);
-            this.Tentrega.Name = "Tentrega";
-            this.Tentrega.Size = new System.Drawing.Size(34, 21);
-            this.Tentrega.TabIndex = 48;
-            this.Tentrega.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Tentrega_KeyPress);
             // 
             // comboBox1
             // 
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(167, 154);
+            this.comboBox1.Location = new System.Drawing.Point(149, 152);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(187, 25);
+            this.comboBox1.Size = new System.Drawing.Size(205, 25);
             this.comboBox1.TabIndex = 47;
             // 
             // butCerrar
@@ -280,7 +232,7 @@
             this.butCerrar.FlatAppearance.BorderColor = System.Drawing.Color.DarkGray;
             this.butCerrar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.butCerrar.Font = new System.Drawing.Font("Gothic A1", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.butCerrar.Location = new System.Drawing.Point(16, 278);
+            this.butCerrar.Location = new System.Drawing.Point(14, 301);
             this.butCerrar.Name = "butCerrar";
             this.butCerrar.Size = new System.Drawing.Size(72, 32);
             this.butCerrar.TabIndex = 46;
@@ -292,7 +244,7 @@
             // 
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Gothic A1", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.Location = new System.Drawing.Point(11, 189);
+            this.label7.Location = new System.Drawing.Point(11, 190);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(77, 25);
             this.label7.TabIndex = 44;
@@ -314,7 +266,7 @@
             this.butEliminar.FlatAppearance.BorderColor = System.Drawing.Color.DarkGray;
             this.butEliminar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.butEliminar.Font = new System.Drawing.Font("Gothic A1", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.butEliminar.Location = new System.Drawing.Point(171, 278);
+            this.butEliminar.Location = new System.Drawing.Point(169, 301);
             this.butEliminar.Name = "butEliminar";
             this.butEliminar.Size = new System.Drawing.Size(72, 32);
             this.butEliminar.TabIndex = 39;
@@ -328,7 +280,7 @@
             this.butEditar.FlatAppearance.BorderColor = System.Drawing.Color.DarkGray;
             this.butEditar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.butEditar.Font = new System.Drawing.Font("Gothic A1", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.butEditar.Location = new System.Drawing.Point(94, 278);
+            this.butEditar.Location = new System.Drawing.Point(92, 301);
             this.butEditar.Name = "butEditar";
             this.butEditar.Size = new System.Drawing.Size(71, 32);
             this.butEditar.TabIndex = 38;
@@ -339,9 +291,9 @@
             // richTextBox1
             // 
             this.richTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.richTextBox1.Location = new System.Drawing.Point(167, 86);
+            this.richTextBox1.Location = new System.Drawing.Point(149, 83);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(187, 54);
+            this.richTextBox1.Size = new System.Drawing.Size(205, 54);
             this.richTextBox1.TabIndex = 37;
             this.richTextBox1.Text = "";
             // 
@@ -349,10 +301,10 @@
             // 
             this.textNombre.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textNombre.Font = new System.Drawing.Font("Gothic A1", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textNombre.Location = new System.Drawing.Point(167, 50);
+            this.textNombre.Location = new System.Drawing.Point(149, 49);
             this.textNombre.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textNombre.Name = "textNombre";
-            this.textNombre.Size = new System.Drawing.Size(187, 22);
+            this.textNombre.Size = new System.Drawing.Size(205, 22);
             this.textNombre.TabIndex = 33;
             // 
             // label5
@@ -364,16 +316,6 @@
             this.label5.Size = new System.Drawing.Size(112, 25);
             this.label5.TabIndex = 32;
             this.label5.Text = "Encargado(s)";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Gothic A1", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(11, 226);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(148, 25);
-            this.label3.TabIndex = 30;
-            this.label3.Text = "Tiempo de entrega";
             // 
             // label2
             // 
@@ -425,7 +367,7 @@
             this.butGuardar.FlatAppearance.BorderColor = System.Drawing.Color.DarkGray;
             this.butGuardar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.butGuardar.Font = new System.Drawing.Font("Gothic A1", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.butGuardar.Location = new System.Drawing.Point(94, 278);
+            this.butGuardar.Location = new System.Drawing.Point(92, 301);
             this.butGuardar.Name = "butGuardar";
             this.butGuardar.Size = new System.Drawing.Size(71, 32);
             this.butGuardar.TabIndex = 41;
@@ -446,11 +388,45 @@
             this.cancelar.UseVisualStyleBackColor = true;
             this.cancelar.Click += new System.EventHandler(this.button1_Click_1);
             // 
+            // dateTimePicker1
+            // 
+            this.dateTimePicker1.Location = new System.Drawing.Point(149, 232);
+            this.dateTimePicker1.Name = "dateTimePicker1";
+            this.dateTimePicker1.Size = new System.Drawing.Size(205, 21);
+            this.dateTimePicker1.TabIndex = 61;
+            // 
+            // dateTimePicker2
+            // 
+            this.dateTimePicker2.Location = new System.Drawing.Point(149, 268);
+            this.dateTimePicker2.Name = "dateTimePicker2";
+            this.dateTimePicker2.Size = new System.Drawing.Size(205, 21);
+            this.dateTimePicker2.TabIndex = 62;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Gothic A1", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.Location = new System.Drawing.Point(11, 229);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(120, 25);
+            this.label8.TabIndex = 63;
+            this.label8.Text = "Fecha de inicio";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Gothic A1", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label9.Location = new System.Drawing.Point(11, 264);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(100, 25);
+            this.label9.TabIndex = 64;
+            this.label9.Text = "Fecha de fin";
+            // 
             // VisuaTrabajos
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(730, 330);
+            this.ClientSize = new System.Drawing.Size(730, 346);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -473,7 +449,6 @@
         private System.Windows.Forms.Button butEliminar;
         private System.Windows.Forms.Button butEditar;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button butGuardar;
@@ -488,14 +463,14 @@
         protected internal System.Windows.Forms.TextBox textNombre;
         protected internal System.Windows.Forms.RichTextBox richTextBox1;
         protected internal System.Windows.Forms.ComboBox comboBox1;
-        protected internal System.Windows.Forms.TextBox Tentrega;
         protected internal System.Windows.Forms.ComboBox comboBox2;
         protected internal System.Windows.Forms.ComboBox comboBox3;
         protected internal System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Button editarEncargados;
         private System.Windows.Forms.Button cancelar;
-        protected internal System.Windows.Forms.RadioButton año;
-        protected internal System.Windows.Forms.RadioButton mes;
-        protected internal System.Windows.Forms.RadioButton dias;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label label8;
+        protected internal System.Windows.Forms.DateTimePicker dateTimePicker2;
+        protected internal System.Windows.Forms.DateTimePicker dateTimePicker1;
     }
 }

@@ -22,6 +22,7 @@ namespace AppProyectoBD
         int IDTrab;
         public bool editando;
         public bool aceptar;
+        public bool checar;
         Conexion co;
         int TipoTrab;
         int ProID;
@@ -37,6 +38,7 @@ namespace AppProyectoBD
             this.co = co;
             editando = false;
             aceptar = false;
+            checar = false;
 
             this.StartPosition = FormStartPosition.CenterParent;
 
@@ -139,20 +141,23 @@ namespace AppProyectoBD
                 richTextBox1.Enabled = false;
                 comboBox1.Enabled = false;
                 comboBox2.Enabled = false;
-                Tentrega.Enabled = false;
+                dateTimePicker1.Enabled = false;
+                dateTimePicker2.Enabled = false;
                 comboBox3.Enabled = false;
                 dataGridView1.Enabled = false;
                 
-                //------------------Editar trabajo---------------------------------------------
-                co.Comando("SELECT Descripcion, Nombre,TiempoEntrega,TipoTrabajosID, IFNULL(ProyectosID,0) FROM Trabajos WHERE ID = " + IDTrab+";");
+                //*------------------Editar trabajo---------------------------------------------
+                co.Comando("SELECT Descripcion, Nombre,FechaInicio,FechaFin,TipoTrabajosID, IFNULL(ProyectosID,0) FROM Trabajos WHERE ID = " + IDTrab+";");
 
                 if (co.LeerRead)
                 {
                     richTextBox1.Text = co.Leer.GetString(0);
                     textNombre.Text = co.Leer.GetString(1);
-                    Tentrega.Text = co.Leer.GetInt32(2).ToString();
-                    TipoTrab = co.Leer.GetInt32(3);
-                    ProID = co.Leer.GetInt32(4);
+                    //Tentrega.Text = co.Leer.GetInt32(2).ToString();
+                    dateTimePicker1.Value = co.Leer.GetDateTime(2);
+                    dateTimePicker2.Value = co.Leer.GetDateTime(3);
+                    TipoTrab = co.Leer.GetInt32(4);
+                    ProID = co.Leer.GetInt32(5);
 
                 }
                 else
@@ -186,7 +191,8 @@ namespace AppProyectoBD
                 richTextBox1.Enabled = true;
                 comboBox1.Enabled = true;
                 comboBox2.Enabled = true;
-                Tentrega.Enabled = true;
+                dateTimePicker1.Enabled = true;
+                dateTimePicker2.Enabled = true;
                 comboBox3.Enabled = true;
                 dataGridView1.Enabled = true;
 
@@ -222,7 +228,7 @@ namespace AppProyectoBD
         //Validacion del formulario
         private bool Validacion()
         {
-            if(textNombre.Text.Equals("") || richTextBox1.Text.Equals("") || Tentrega.Text.Equals(""))
+            if(textNombre.Text.Equals("") || richTextBox1.Text.Equals("") )
             {
                 MessageBox mens = new MessageBox("Complete el formulario", 2);
                 mens.ShowDialog();
@@ -239,48 +245,55 @@ namespace AppProyectoBD
                 //Opcion guardar si es desde visualizar
                 if (sel == 1)
                 {
-                    //Botones
-                    butEditar.Visible = true;
-                    butGuardar.Visible = false;
-                    butEliminar.Visible = true;
-                    butCerrar.Visible = true;
-                    editarEncargados.Visible = true;
-                    //butCancelar.Visible = false;
-                    AgreEmpleado.Visible = false;
-                    EliEmpleado.Visible = false;
-                    PrograPago.Visible = false;
-                    //TextBox
-                    textNombre.Enabled = false;
-                    richTextBox1.Enabled = false;
-                    comboBox1.Enabled = false;
-                    comboBox2.Enabled = false;
-                    Tentrega.Enabled = false;
-                    comboBox3.Enabled = false;
-                    dataGridView1.Enabled = false;
-
-                    //-----------------Editar unicamente Trabajo--------------------
-                    int tiempoEntrega = Convert.ToInt32(Tentrega.Text);
-                    co.Comando("UPDATE Trabajos SET Nombre  = '" + textNombre.Text + "',Descripcion = '" + richTextBox1.Text + "',TipoTrabajosID = " +
-                                    (comboBox1.SelectedIndex + 1) + ",TiempoEntrega = " + tiempoEntrega +
-                                    ",FechaEntrega = adddate(CURDATE()," + tiempoEntrega + ") WHERE ID = " + IDTrab + ";");
-
-                    //Si el proyecto es nulo y se le asigna un proyecto
-                    if (ProyectoOriginal == 0 && ProyectosID[comboBox2.SelectedIndex] != 0)
+                    checar = false;
+                    MessageBox mensaje = new MessageBox("Revise bien el tiempo de entrega \n y su periodo correspondiente", 1);
+                    mensaje.ShowDialog();
+                    if (checar)
                     {
-                        co.Comando("UPDATE Trabajos SET ProyectosID = " + ProyectosID[comboBox2.SelectedIndex] + " WHERE ID = " + IDTrab + ";");
-                    }
-                    //Si el proyecto NO es nulo y se le asiga nulo
-                    if (ProyectoOriginal != 0 && ProyectosID[comboBox2.SelectedIndex] == 0)
-                    {
-                        co.Comando("UPDATE Trabajos SET ProyectosID = null WHERE ID = " + IDTrab + ";");
-                    }
-                    //Si el proyecto NO es nulo y se le asigna otro proyecto 
-                    if (ProyectoOriginal != 0 && ProyectosID[comboBox2.SelectedIndex] != 0)
-                    {
-                        co.Comando("UPDATE Trabajos SET ProyectosID = " + ProyectosID[comboBox2.SelectedIndex] + " WHERE ID = " + IDTrab + ";");
-                    }
-                    //Si el proyecto es nulo y se le asigna otro nulo, simplemente no se hace nada
+                        //Botones
+                        butEditar.Visible = true;
+                        butGuardar.Visible = false;
+                        butEliminar.Visible = true;
+                        butCerrar.Visible = true;
+                        editarEncargados.Visible = true;
+                        //butCancelar.Visible = false;
+                        AgreEmpleado.Visible = false;
+                        EliEmpleado.Visible = false;
+                        PrograPago.Visible = false;
+                        //TextBox
+                        textNombre.Enabled = false;
+                        richTextBox1.Enabled = false;
+                        comboBox1.Enabled = false;
+                        comboBox2.Enabled = false;
+                        dateTimePicker1.Enabled = false;
+                        dateTimePicker2.Enabled = false;
+                        comboBox3.Enabled = false;
+                        dataGridView1.Enabled = false;
 
+                        string fechaA = dateTimePicker1.Value.Date.ToString("yyyy-MM-dd");
+                        string fechaB = dateTimePicker2.Value.Date.ToString("yyyy-MM-dd");
+                        //-----------------Editar unicamente Trabajo--------------------
+                        co.Comando("UPDATE Trabajos SET Nombre  = '" + textNombre.Text + "',Descripcion = '" + richTextBox1.Text + "',TipoTrabajosID = " +
+                                        (comboBox1.SelectedIndex + 1) + ",FechaFin = '" + fechaB +
+                                        "',FechaInicio = '"+fechaA+ "',ses_id = "+ co.sesion +" WHERE ID = " + IDTrab + ";");
+
+                        //Si el proyecto es nulo y se le asigna un proyecto
+                        if (ProyectoOriginal == 0 && ProyectosID[comboBox2.SelectedIndex] != 0)
+                        {
+                            co.Comando("UPDATE Trabajos SET ProyectosID = " + ProyectosID[comboBox2.SelectedIndex] + " WHERE ID = " + IDTrab + ";");
+                        }
+                        //Si el proyecto NO es nulo y se le asiga nulo
+                        if (ProyectoOriginal != 0 && ProyectosID[comboBox2.SelectedIndex] == 0)
+                        {
+                            co.Comando("UPDATE Trabajos SET ProyectosID = null WHERE ID = " + IDTrab + ";");
+                        }
+                        //Si el proyecto NO es nulo y se le asigna otro proyecto 
+                        if (ProyectoOriginal != 0 && ProyectosID[comboBox2.SelectedIndex] != 0)
+                        {
+                            co.Comando("UPDATE Trabajos SET ProyectosID = " + ProyectosID[comboBox2.SelectedIndex] + " WHERE ID = " + IDTrab + ";");
+                        }
+                        //Si el proyecto es nulo y se le asigna otro nulo, simplemente no se hace nada
+                    }
                 }
             }
 
@@ -315,9 +328,12 @@ namespace AppProyectoBD
                 richTextBox1.Enabled = true;
                 comboBox1.Enabled = true;
                 comboBox2.Enabled = true;
-                Tentrega.Enabled = true;
-                comboBox3.Enabled = true;
+                dateTimePicker1.Enabled = true;
+                dateTimePicker2.Enabled = true;
+                comboBox3.Enabled = false;
                 dataGridView1.Enabled = false;
+
+                editando = true;
             }
             else
             {
@@ -364,6 +380,7 @@ namespace AppProyectoBD
                         {
                             //Si ya estaba quiere decir que pertenece al trabajo y procede a eliminarse de la BD
                             //Mensaje que al acpetar se cambia la variable aceptar a TRUE desde el otro frame
+                            aceptar = false;
                             MessageBox mensaje = new MessageBox("¿Seguro que desea eliminar?", 1);
                             mensaje.ShowDialog();
                         }
@@ -371,6 +388,7 @@ namespace AppProyectoBD
 
                         if (aceptar)
                         {
+                            aceptar = false;
                             int IDPago = 0;
                             //Cuenta los pagos para saber si hay mas de 1 y asi evitar que un trabajo se quede sin empleados
                             co.Comando("SELECT COUNT(*) FROM Pago_Empleado_Trabajos WHERE TrabajosID = " + IDTrab + ";");
@@ -397,7 +415,7 @@ namespace AppProyectoBD
                                 eliminarElemento(0);
 
                                 //Mensaje de confirmacion
-                                MessageBox confirmacion = new MessageBox("Eliminado con exito", 2);
+                                MessageBox confirmacion = new MessageBox("Eliminado con éxito", 2);
                                 confirmacion.ShowDialog();
                             }
                             else
@@ -423,7 +441,7 @@ namespace AppProyectoBD
                 }
                 catch (System.InvalidCastException)
                 {
-                    Form mensaje = new MessageBox("La tabla esta vacia", 2);
+                    Form mensaje = new MessageBox("La tabla esta vacía", 2);
                     mensaje.ShowDialog();
                 }
 
@@ -492,7 +510,7 @@ namespace AppProyectoBD
                         //Se mandan al siguiente Frame para ser dados de alta, tambien se manda cuantos son y se pone
                         // 0 en Trabajo porque apenas se va a crear y se manda la opcion 1 que es crear un nuevo trabajo
                         fpp = new FormularioProgramarPago(tra,IDs, dataGridView1.RowCount, 0, 1, co);
-                        fpp.Show();
+                        fpp.ShowDialog();
                     }
                     catch (NullReferenceException er)
                     {
@@ -640,7 +658,8 @@ namespace AppProyectoBD
                 richTextBox1.Enabled = false;
                 comboBox1.Enabled = false;
                 comboBox2.Enabled = false;
-                Tentrega.Enabled = false;
+                dateTimePicker1.Enabled = false;
+                dateTimePicker2.Enabled = false;
                 comboBox3.Enabled = true;
                 dataGridView1.Enabled = true;
 
@@ -672,7 +691,8 @@ namespace AppProyectoBD
             richTextBox1.Enabled = false;
             comboBox1.Enabled = false;
             comboBox2.Enabled = false;
-            Tentrega.Enabled = false;
+            dateTimePicker1.Enabled = false;
+            dateTimePicker2.Enabled = false;
             comboBox3.Enabled = false;
             dataGridView1.Enabled = false;
             //Creo otra instancia con los datos correctos

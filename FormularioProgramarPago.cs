@@ -116,19 +116,13 @@ namespace AppProyectoBD
                         {
                             string descripcion = frm2.richTextBox1.Text;
                             string nombre = frm2.textNombre.Text;
-                            int tiempoEntrega = Convert.ToInt32(frm2.Tentrega.Text);
                             int tipoTrab = frm2.comboBox1.SelectedIndex + 1;
                             int idPro = frm2.ProyectosID[frm2.comboBox2.SelectedIndex];
-                            string tiempo;
-                            //Se selecciona el intervalo
-                            if (frm2.dias.Checked)
-                                tiempo = "day";
-                            else if (frm2.mes.Checked)
-                                tiempo = "month";
-                            else
-                                tiempo = "year";
+                            string fechaA = frm2.dateTimePicker1.Value.Date.ToString("yyyy-MM-dd");
+                            string fechaB = frm2.dateTimePicker2.Value.Date.ToString("yyyy-MM-dd");
+                            
                             //Se crea el Trabajo nuevo. Si idPro es 0 no hay proyecto asociado
-                            co.Comando("CALL insert_Trabajos('" + descripcion + "','" + nombre + "'," + tiempoEntrega + ",'" + tiempo + "'," + tipoTrab + "," + idPro + ");");
+                            co.Comando("CALL insert_Trabajos('" + descripcion + "','" + nombre + "','" + fechaA + "','" + fechaB + "'," + tipoTrab + "," + idPro + ","+co.sesion+");");
 
                             //Se selecciona el ID maximo de Trabajos que indica el ultimo trabajo creado y al que se le agregaran los empleados
                             co.Comando("SELECT ID FROM Trabajos WHERE ID = (SELECT MAX(ID) FROM Trabajos);");
@@ -177,18 +171,23 @@ namespace AppProyectoBD
             tra.DatosTablas();
         }
 
+        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        {
+            comboBox2.Enabled = false;
+        }
+
         private void alta()
         {
-            MessageBox mens = new MessageBox("¿Esta seguro que desea guardar?", 1);
+            MessageBox mens = new MessageBox("¿Está seguro que desea guardar?", 1);
             mens.ShowDialog();
             if (estado)
             {
                 int maxID = 0;
-                //Creo un elemento de la tabla Empleado_Trabajos   (int)frm2.dataGridView1[0, comboBox1.SelectedIndex].Valu
-                co.Comando("INSERT INTO Empleado_Trabajos VALUES(" + IDs[comboBox1.SelectedIndex] + "," + IDTrab + ");");
+                //Creo un elemento de la tabla Empleado_Trabajos   
+                co.Comando("INSERT INTO Empleado_Trabajos VALUES(" + IDs[comboBox1.SelectedIndex] + "," + IDTrab + ","+co.sesion+");");
 
                 //Creo un elemento de la tabla PagoProgramado  0 - Contado  1 - Diferido
-                co.Comando("INSERT INTO PagoProgramado (Tipo, NumTotalPagos) VALUES(" + (radioButton1.Checked ? 0 : 1) + "," + (radioButton1.Checked ? 1 : (int)comboBox2.SelectedItem) + ");");
+                co.Comando("INSERT INTO PagoProgramado (Tipo, NumTotalPagos,ses_id) VALUES(" + (radioButton1.Checked ? 0 : 1) + "," + (radioButton1.Checked ? 1 : (int)comboBox2.SelectedItem) + ","+co.sesion+");");
 
 
                 //Selecciono el ultimo pago programado para asignarlo al trabajador
@@ -199,7 +198,7 @@ namespace AppProyectoBD
                 }
 
                 //Creo el elemento de la tabla Pago_Empleadp_Trabajos
-                co.Comando("INSERT INTO Pago_Empleado_Trabajos VALUES(" + maxID + "," + IDs[comboBox1.SelectedIndex] + "," + IDTrab + ");");
+                co.Comando("INSERT INTO Pago_Empleado_Trabajos VALUES(" + maxID + "," + IDs[comboBox1.SelectedIndex] + "," + IDTrab + ","+co.sesion+");");
                 //Remuevo del arreglo el empleado ya asignado
                 IDs.RemoveAt(comboBox1.SelectedIndex);
                 conta--;

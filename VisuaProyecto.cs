@@ -160,50 +160,58 @@ namespace AppProyectoBD
 
         private void butGuardar_Click(object sender, EventArgs e)
         {
-            if (Validacion())
+            try
             {
-                //Opcion guardar si es desde visualizar
-                if (sel == 1)
+                if (Validacion())
                 {
-                    butGuardar.Visible = false;
-                    butEliminar.Visible = true;
-                    butEditar.Visible = true;
-                    nombre.Enabled = false;
-                    dateTimePicker1.Enabled = false;
-                    dateTimePicker2.Enabled = false;
-                    comboBox1.Enabled = false;
-                    richTextBox1.Enabled = false;
+                    //Opcion guardar si es desde visualizar
+                    if (sel == 1)
+                    {
+                        butGuardar.Visible = false;
+                        butEliminar.Visible = true;
+                        butEditar.Visible = true;
+                        nombre.Enabled = false;
+                        dateTimePicker1.Enabled = false;
+                        dateTimePicker2.Enabled = false;
+                        comboBox1.Enabled = false;
+                        richTextBox1.Enabled = false;
 
-                    //----------------------Guaradr un proyecto editado------------------------------
-                    string fecha1 = dateTimePicker1.Value.Date.ToString("yyyy-MM-dd");
+                        //----------------------Guaradr un proyecto editado------------------------------
+                        string fecha1 = dateTimePicker1.Value.Date.ToString("yyyy-MM-dd");
 
-                    string fecha2 = dateTimePicker2.Value.Date.ToString("yyyy-MM-dd");
+                        string fecha2 = dateTimePicker2.Value.Date.ToString("yyyy-MM-dd");
 
-                    co.Comando("UPDATE Proyectos SET Nombre ='" + nombre.Text + "',Descripcion = '" + richTextBox1.Text + "',FechaInicio ='" + fecha1 + "',FechaFin ='" + fecha2 + "',Encargado ='" + comboBox1.Text + "'" +
-                                            "WHERE ID=" + IDPro + ";");
-                    //---------------------------------------------------------------------------------
-                    pro.DatosTablas();
+                        co.Comando("UPDATE Proyectos SET ses_id = "+co.sesion+", Nombre ='" + nombre.Text + "',Descripcion = '" + richTextBox1.Text + "',FechaInicio ='" + fecha1 + "',FechaFin ='" + fecha2 + "',Encargado ='" + comboBox1.Text + "'" +
+                                                "WHERE ID=" + IDPro + ";");
+                        //---------------------------------------------------------------------------------
+                        pro.DatosTablas();
+                    }
+                    //Opcion guardar si es desde agregar nuevo proyecto
+                    else
+                    {
+
+                        //----------------------Insertar datos en Proyectos--------------------------
+                        string fecha1 = dateTimePicker1.Value.Date.ToString("yyyy-MM-dd");
+
+                        string fecha2 = dateTimePicker2.Value.Date.ToString("yyyy-MM-dd");
+
+                        co.Comando("INSERT INTO Proyectos (Nombre,Descripcion,FechaInicio, FechaFin, Encargado,ses_id) " +
+                                             " VALUES('" + nombre.Text + "','" + richTextBox1.Text + "','" + fecha1 + "'," +
+                                             "'" + fecha2 + "','" + comboBox1.Text + "',"+co.sesion+");");
+
+                        //------------------------------------------------------------------------------
+                        Form message = new MessageBox("Guardado con éxito", 2);
+                        pro.DatosTablas();
+                        message.ShowDialog();
+                        this.Close();
+
+                    }
                 }
-                //Opcion guardar si es desde agregar nuevo proyecto
-                else
-                {
-
-                    //----------------------Insertar datos en Proyectos--------------------------
-                    string fecha1 = dateTimePicker1.Value.Date.ToString("yyyy-MM-dd");
-
-                    string fecha2 = dateTimePicker2.Value.Date.ToString("yyyy-MM-dd");
-
-                    co.Comando("INSERT INTO Proyectos (Nombre,Descripcion,FechaInicio, FechaFin, Encargado ) " +
-                                         " VALUES('" + nombre.Text + "','" + richTextBox1.Text + "','" + fecha1 + "'," +
-                                         "'" + fecha2 + "','" + comboBox1.Text + "');");
-
-                    //------------------------------------------------------------------------------
-                    Form message = new MessageBox("Guardado con exito", 2);
-                    pro.DatosTablas();
-                    message.ShowDialog();
-                    this.Close();
-
-                }
+            }
+            catch (Exception)
+            {
+                Form message = new MessageBox("Verifique los datos", 3);
+                message.ShowDialog();
             }
         }
 
@@ -254,7 +262,7 @@ namespace AppProyectoBD
                     if (confirmacion)
                     {
                         co.Comando("DELETE FROM Proyectos WHERE ID =" + IDPro + ";");
-                        MessageBox mensaje = new MessageBox("Eliminado con exito", 2);
+                        MessageBox mensaje = new MessageBox("Eliminado con éxito", 2);
                         mensaje.ShowDialog();
                         this.Close();
                     }
