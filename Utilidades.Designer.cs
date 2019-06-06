@@ -34,7 +34,6 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Utilidades));
             this.tipoEmpleado = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumn9 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -78,7 +77,7 @@
             this.tipoEmpleado.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.dataGridViewTextBoxColumn9,
             this.dataGridViewTextBoxColumn5});
-            this.tipoEmpleado.Location = new System.Drawing.Point(57, 70);
+            this.tipoEmpleado.Location = new System.Drawing.Point(53, 70);
             this.tipoEmpleado.Name = "tipoEmpleado";
             this.tipoEmpleado.ReadOnly = true;
             dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(228)))), ((int)(((byte)(238)))), ((int)(((byte)(238)))));
@@ -122,7 +121,7 @@
             this.tipoTrabajo.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.dataGridViewTextBoxColumn1,
             this.dataGridViewTextBoxColumn2});
-            this.tipoTrabajo.Location = new System.Drawing.Point(469, 70);
+            this.tipoTrabajo.Location = new System.Drawing.Point(465, 70);
             this.tipoTrabajo.Name = "tipoTrabajo";
             this.tipoTrabajo.ReadOnly = true;
             dataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(228)))), ((int)(((byte)(238)))), ((int)(((byte)(238)))));
@@ -155,7 +154,7 @@
             this.label1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Gothic A1", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(53, 35);
+            this.label1.Location = new System.Drawing.Point(49, 35);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(159, 24);
             this.label1.TabIndex = 41;
@@ -167,7 +166,7 @@
             this.label2.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Gothic A1", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(465, 35);
+            this.label2.Location = new System.Drawing.Point(461, 35);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(145, 24);
             this.label2.TabIndex = 42;
@@ -189,7 +188,7 @@
             this.redesSociales.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.dataGridViewTextBoxColumn3,
             this.dataGridViewTextBoxColumn4});
-            this.redesSociales.Location = new System.Drawing.Point(57, 290);
+            this.redesSociales.Location = new System.Drawing.Point(53, 290);
             this.redesSociales.Name = "redesSociales";
             this.redesSociales.ReadOnly = true;
             dataGridViewCellStyle6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(228)))), ((int)(((byte)(238)))), ((int)(((byte)(238)))));
@@ -222,7 +221,7 @@
             this.label4.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Gothic A1", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(53, 251);
+            this.label4.Location = new System.Drawing.Point(49, 251);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(131, 24);
             this.label4.TabIndex = 46;
@@ -237,7 +236,7 @@
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button1.Font = new System.Drawing.Font("Gothic A1", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.button1.Location = new System.Drawing.Point(722, 31);
+            this.button1.Location = new System.Drawing.Point(718, 31);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(78, 33);
             this.button1.TabIndex = 48;
@@ -254,7 +253,7 @@
             this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button2.Font = new System.Drawing.Font("Gothic A1", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button2.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.button2.Location = new System.Drawing.Point(310, 251);
+            this.button2.Location = new System.Drawing.Point(306, 251);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(78, 33);
             this.button2.TabIndex = 49;
@@ -270,7 +269,7 @@
             this.panel1.Controls.Add(this.richTextBox1);
             this.panel1.Controls.Add(this.label5);
             this.panel1.Controls.Add(this.label3);
-            this.panel1.Location = new System.Drawing.Point(469, 251);
+            this.panel1.Location = new System.Drawing.Point(465, 251);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(238, 189);
             this.panel1.TabIndex = 50;
@@ -291,7 +290,7 @@
             this.richTextBox1.Font = new System.Drawing.Font("Gothic A1", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.richTextBox1.Location = new System.Drawing.Point(-1, 115);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(238, 73);
+            this.richTextBox1.Size = new System.Drawing.Size(331, 73);
             this.richTextBox1.TabIndex = 2;
             this.richTextBox1.Text = "";
             // 
@@ -324,7 +323,7 @@
             this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button3.Font = new System.Drawing.Font("Gothic A1", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button3.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.button3.Location = new System.Drawing.Point(722, 301);
+            this.button3.Location = new System.Drawing.Point(718, 301);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(78, 33);
             this.button3.TabIndex = 51;
@@ -341,7 +340,7 @@
             this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button4.Font = new System.Drawing.Font("Gothic A1", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button4.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.button4.Location = new System.Drawing.Point(722, 363);
+            this.button4.Location = new System.Drawing.Point(718, 363);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(78, 33);
             this.button4.TabIndex = 52;
@@ -366,10 +365,8 @@
             this.Controls.Add(this.tipoTrabajo);
             this.Controls.Add(this.tipoEmpleado);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Utilidades";
             this.Text = "Utilidades";
-            this.SizeChanged += new System.EventHandler(this.Utilidades_SizeChanged);
             ((System.ComponentModel.ISupportInitialize)(this.tipoEmpleado)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tipoTrabajo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.redesSociales)).EndInit();

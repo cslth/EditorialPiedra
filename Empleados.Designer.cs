@@ -43,15 +43,15 @@
             this.btnEditar = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.tEmpleado = new System.Windows.Forms.Label();
-            this.nom = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            this.label4 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
+            this.label5 = new System.Windows.Forms.Label();
+            this.nom = new System.Windows.Forms.Label();
+            this.tEmpleado = new System.Windows.Forms.Label();
             this.imgTrab = new PruebaA.CircularPictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.tablaEmpleados)).BeginInit();
             this.panel1.SuspendLayout();
@@ -191,62 +191,21 @@
             this.panel1.Controls.Add(this.dataGridView1);
             this.panel1.Controls.Add(this.label3);
             this.panel1.Controls.Add(this.imgTrab);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Right;
             this.panel1.Location = new System.Drawing.Point(587, 0);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(270, 492);
             this.panel1.TabIndex = 56;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
-            // tEmpleado
+            // label3
             // 
-            this.tEmpleado.AutoSize = true;
-            this.tEmpleado.Location = new System.Drawing.Point(3, 245);
-            this.tEmpleado.Name = "tEmpleado";
-            this.tEmpleado.Size = new System.Drawing.Size(38, 21);
-            this.tEmpleado.TabIndex = 62;
-            this.tEmpleado.Text = "----";
-            // 
-            // nom
-            // 
-            this.nom.AutoSize = true;
-            this.nom.Location = new System.Drawing.Point(3, 198);
-            this.nom.Name = "nom";
-            this.nom.Size = new System.Drawing.Size(38, 21);
-            this.nom.TabIndex = 61;
-            this.nom.Text = "----";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Gothic A1", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(3, 224);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(130, 24);
-            this.label5.TabIndex = 60;
-            this.label5.Text = "Tipo de empleado";
-            // 
-            // button1
-            // 
-            this.button1.BackColor = System.Drawing.Color.Transparent;
-            this.button1.FlatAppearance.BorderColor = System.Drawing.Color.DarkGray;
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.Location = new System.Drawing.Point(101, 450);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(78, 30);
-            this.button1.TabIndex = 59;
-            this.button1.Text = "Ver todo";
-            this.button1.UseVisualStyleBackColor = false;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(3, 273);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(74, 21);
-            this.label4.TabIndex = 58;
-            this.label4.Text = "TRABAJOS";
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Gothic A1", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(3, 177);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(64, 24);
+            this.label3.TabIndex = 2;
+            this.label3.Text = "Nombre";
             // 
             // dataGridView1
             // 
@@ -301,15 +260,55 @@
             this.Column2.Name = "Column2";
             this.Column2.ReadOnly = true;
             // 
-            // label3
+            // label4
             // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Gothic A1", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(3, 177);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(64, 24);
-            this.label3.TabIndex = 2;
-            this.label3.Text = "Nombre";
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(3, 273);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(74, 21);
+            this.label4.TabIndex = 58;
+            this.label4.Text = "TRABAJOS";
+            // 
+            // button1
+            // 
+            this.button1.BackColor = System.Drawing.Color.Transparent;
+            this.button1.FlatAppearance.BorderColor = System.Drawing.Color.DarkGray;
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button1.Location = new System.Drawing.Point(101, 450);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(78, 30);
+            this.button1.TabIndex = 59;
+            this.button1.Text = "Ver todo";
+            this.button1.UseVisualStyleBackColor = false;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Gothic A1", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(3, 224);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(130, 24);
+            this.label5.TabIndex = 60;
+            this.label5.Text = "Tipo de empleado";
+            // 
+            // nom
+            // 
+            this.nom.AutoSize = true;
+            this.nom.Location = new System.Drawing.Point(3, 198);
+            this.nom.Name = "nom";
+            this.nom.Size = new System.Drawing.Size(38, 21);
+            this.nom.TabIndex = 61;
+            this.nom.Text = "----";
+            // 
+            // tEmpleado
+            // 
+            this.tEmpleado.AutoSize = true;
+            this.tEmpleado.Location = new System.Drawing.Point(3, 245);
+            this.tEmpleado.Name = "tEmpleado";
+            this.tEmpleado.Size = new System.Drawing.Size(38, 21);
+            this.tEmpleado.TabIndex = 62;
+            this.tEmpleado.Text = "----";
             // 
             // imgTrab
             // 
@@ -338,12 +337,10 @@
             this.Controls.Add(this.tablaEmpleados);
             this.Font = new System.Drawing.Font("Gothic A1", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.Name = "Empleados";
             this.Text = "Empleados";
             this.Load += new System.EventHandler(this.Empleados_Load);
-            this.SizeChanged += new System.EventHandler(this.Empleados_SizeChanged);
             ((System.ComponentModel.ISupportInitialize)(this.tablaEmpleados)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();

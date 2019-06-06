@@ -364,10 +364,9 @@
             this.Controls.Add(this.fecha1);
             this.Controls.Add(this.label1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Trabajos";
             this.Text = "Trabajos";
-            this.SizeChanged += new System.EventHandler(this.Trabajos_SizeChanged);
+            this.Load += new System.EventHandler(this.Trabajos_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             this.ResumeLayout(false);

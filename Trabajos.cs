@@ -35,19 +35,11 @@ namespace AppProyectoBD
            
             if (co.LeerRead)
                 rows = co.Leer.GetInt32(0);
-            if (rows > 0)
-                dataGridView1.RowCount = rows;
-            else
-            {
-                dataGridView1.RowCount = 1;
-                dataGridView1[0, 0].Value = "";
-                dataGridView1[1, 0].Value = "";
-                dataGridView1[2, 0].Value = "";
-                dataGridView1[3, 0].Value = "";
-                dataGridView1[4, 0].Value = "";
-            }
-
+            if (rows == 0)
+                rows = 1;
             int i = 0;
+            dataGridView1.RowCount = rows;
+            
             //Coloco los los datos de los Trabajos en la tabla  
             co.Comando("SELECT t.ID, t.nombre, tt.NombreTipoTrab ,IFNULL(p.Nombre,'Sin proyecto'), t.FechaEntrega FROM Proyectos as p " +
                        "RIGHT OUTER JOIN Trabajos as t ON (t.ProyectosID = p.ID) " +
@@ -73,14 +65,7 @@ namespace AppProyectoBD
             if (rows > 0)
                 dataGridView2.RowCount = rows;
             else
-            {
                 dataGridView2.RowCount = 1;
-                dataGridView2[0, 0].Value = "";
-                dataGridView2[1, 0].Value = "";
-                dataGridView2[2, 0].Value = "";
-                dataGridView2[3, 0].Value = "";
-                dataGridView2[4, 0].Value = "";
-            }
 
             //Coloco los los datos de los Trabajos en la tabla 
 
@@ -100,13 +85,18 @@ namespace AppProyectoBD
             //------------------------------------------------------------------------------
         }
 
+        private void Trabajos_Load(object sender, EventArgs e)
+        {
+
+        }
+
         private void butVisua_Click(object sender, EventArgs e)
         {
             try
             {
                 if (!dataGridView1[0, dataGridView1.CurrentCell.RowIndex].Value.Equals(""))
                 {
-                    Form visuaTrabajos = new VisuaTrabajos(this,co, (int)dataGridView1[0, dataGridView1.CurrentCell.RowIndex].Value, 1);
+                    Form visuaTrabajos = new VisuaTrabajos(co, (int)dataGridView1[0, dataGridView1.CurrentCell.RowIndex].Value, 1);
                     visuaTrabajos.ShowDialog();
                 }
                 else
@@ -117,7 +107,7 @@ namespace AppProyectoBD
             }
             catch (System.NullReferenceException)
             {
-                Form mensaje = new MessageBox("Seleccione un trabajo",2);
+                Form mensaje = new MessageBox("Seleccione un trabajo",1);
                 mensaje.ShowDialog();
             }
         }
@@ -126,34 +116,35 @@ namespace AppProyectoBD
         {
             try
             {
-                Form visuaTrabajos = new VisuaTrabajos(this,co,(int)dataGridView2[0, dataGridView2.CurrentCell.RowIndex].Value, 1);
+                Form visuaTrabajos = new VisuaTrabajos(co,(int)dataGridView2[0, dataGridView2.CurrentCell.RowIndex].Value, 1);
                 visuaTrabajos.ShowDialog();
             }
             catch (System.NullReferenceException)
             {
-                Form mensaje = new MessageBox("Seleccione un trabajo",2);
+                Form mensaje = new MessageBox("Seleccione un trabajo",1);
                 mensaje.ShowDialog();
             }
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            if (co.permiso.Equals(co.administrador))
-            {
-                Form visuaTrabajos = new VisuaTrabajos(this,co, 0, 2);
-                visuaTrabajos.ShowDialog();
-            }
-            else
-            {
-                AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No cuenta con los permisos para realizar esta acción", 2);
-                mens.ShowDialog();
-            }
+            Form visuaTrabajos = new VisuaTrabajos(co,0, 2);
+            visuaTrabajos.ShowDialog();
         }
 
         private void buscar_Click(object sender, EventArgs e)
         {
-            string fechaA = fecha1.Value.Date.ToString("yyyy-MM-dd");
-            string fechaB = fecha2.Value.Date.ToString("yyyy-MM-dd");
+            string fechaInicio = fecha1.Text;
+            string año = fechaInicio.Substring(6, 4);
+            string mes = fechaInicio.Substring(2, 4);
+            string dia = fechaInicio.Substring(0, 2);
+            string fechaA = año + mes + dia;
+
+            string fechaFin = fecha2.Text;
+            string año2 = fechaFin.Substring(6, 4);
+            string mes2 = fechaFin.Substring(2, 4);
+            string dia2 = fechaFin.Substring(0, 2);
+            string fechaB = año2 + mes2 + dia2;
 
             buscarTrabajos(fechaA, fechaB, dataGridView1,1);
         }
@@ -205,26 +196,19 @@ namespace AppProyectoBD
     
         private void buscar2_Click(object sender, EventArgs e)
         {
-            string fechaA = fecha3.Value.Date.ToString("yyyy-MM-dd");
-            string fechaB = fecha4.Value.Date.ToString("yyyy-MM-dd");
+            string fechaInicio = fecha3.Text;
+            string año = fechaInicio.Substring(6, 4);
+            string mes = fechaInicio.Substring(2, 4);
+            string dia = fechaInicio.Substring(0, 2);
+            string fechaA = año + mes + dia;
+
+            string fechaFin = fecha4.Text;
+            string año2 = fechaFin.Substring(6, 4);
+            string mes2 = fechaFin.Substring(2, 4);
+            string dia2 = fechaFin.Substring(0, 2);
+            string fechaB = año2 + mes2 + dia2;
 
             buscarTrabajos(fechaA, fechaB,dataGridView2,2);
-        }
-
-        private void Trabajos_SizeChanged(object sender, EventArgs e)
-        {
-            label1.Location = new Point(43, label1.Location.Y);
-            dataGridView1.Location = new Point(43, dataGridView1.Location.Y);
-            dataGridView1.Width = this.Width - 94;
-
-            label2.Location = new Point(43, label2.Location.Y);
-            dataGridView2.Location = new Point(43, dataGridView2.Location.Y);
-            dataGridView2.Width = this.Width - 94;
-
-            butVisua.Location = new Point(this.Width - 197, butVisua.Location.Y);
-            butVisua2.Location = new Point(this.Width - 197, butVisua2.Location.Y);
-
-            button3.Location = new Point(this.Width - 92, button3.Location.Y);
         }
     }
 

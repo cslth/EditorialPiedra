@@ -48,7 +48,6 @@ namespace PruebaA
 		bool clickEmpleado = false;
 
         Conexion co;
-        public bool resultado2 = false;
 		public Empleados(Conexion co)
 		{
 			//SE INICIALIZA LA CONEXION
@@ -141,16 +140,8 @@ namespace PruebaA
 
 		private void agregarEmpleado_Click(object sender, EventArgs e)
 		{//SE ABRE UN NUEVO FORM DE REGISTRO
-            if (co.permiso.Equals(co.administrador))
-            {
-                registroEmpleado form1 = new registroEmpleado(this, co);
-                form1.ShowDialog();
-            }
-            else
-            {
-                AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No cuenta con los permisos para realizar esta acción", 3);
-                mens.ShowDialog();
-            }
+			registroEmpleado form1 = new registroEmpleado(this,co);
+			form1.ShowDialog();
 		}
 
 		private void campoNombre_TextChanged(object sender, EventArgs e)
@@ -203,17 +194,14 @@ namespace PruebaA
 
 		private void btnEliminarEmp_Click(object sender, EventArgs e)
 		{
-            if (co.permiso.Equals(co.administrador))
+            //Checar esto
+            try
             {
-                //Checar esto
-                try
+                idOtroForm = (int)tablaEmpleados[0, tablaEmpleados.CurrentCell.RowIndex].Value;
+                //if (clickEmpleado)
                 {
-                    idOtroForm = (int)tablaEmpleados[0, tablaEmpleados.CurrentCell.RowIndex].Value;
-                    id = (int)tablaEmpleados[0, tablaEmpleados.CurrentCell.RowIndex].Value;
-                    //DialogResult resultado = System.Windows.Forms.MessageBox.Show("¿Está seguro de que quiere borrar al empleado?", "Click en Sí para confirmar", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                    AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("¿Seguro que desea eliminar el elemento?", 1);
-                    mens.ShowDialog();
-                    if (resultado2)
+                    DialogResult resultado = System.Windows.Forms.MessageBox.Show("¿Está seguro de que quiere borrar al empleado?", "Click en Sí para confirmar", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (resultado == DialogResult.Yes)
                     {
                         //LO USAMOS PARA ELIMINAR A UN EMPLEADO SELECCIONAND DESDE LA TABLA DE EMPLEADOS
                         string delete = "DELETE FROM Empleado WHERE ID = " + id + ";";
@@ -221,11 +209,12 @@ namespace PruebaA
                         {
                             co.Comando(delete);
                         }
+
                         catch (MySqlException)
                         {//en caso de no poder borrarse
-                         //System.Windows.Forms.MessageBox.Show("No se ha podido borrar al usuario");
-                            AppProyectoBD.MessageBox mens1 = new AppProyectoBD.MessageBox("Error al borrar el usuario", 3);
-                            mens1.ShowDialog();
+                            //System.Windows.Forms.MessageBox.Show("No se ha podido borrar al usuario");
+                            AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("Error al borrar el usuario", 3);
+                            mens.ShowDialog();
                         }
 
                         finally
@@ -233,17 +222,11 @@ namespace PruebaA
                             refreshTableDELETE();
                         }
                     }
-                    
                 }
-                catch (NullReferenceException ex)
-                {
-                    AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("Seleccione un elemento", 3);
-                    mens.ShowDialog();
-                }
-            }
-            else
-            {
-                AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No cuenta con los permisos para realizar esta acción", 3);
+            }catch(NullReferenceException ex)
+			{
+                //System.Windows.Forms.MessageBox.Show("Seleccione un elemento");
+                AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("Seleccione un elemento", 1);
                 mens.ShowDialog();
             }
 			
@@ -251,13 +234,7 @@ namespace PruebaA
 
 		private void btnEditar_Click(object sender, EventArgs e)
 		{
-            if(co.permiso.Equals(co.administrador))
-                editar();
-            else
-            {
-                AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No cuenta con los permisos para realizar esta acción", 3);
-                mens.ShowDialog();
-            }
+            editar();
         }
 
         public void editar()
@@ -265,7 +242,6 @@ namespace PruebaA
             try
             {
                 idOtroForm = (int)tablaEmpleados[0, tablaEmpleados.CurrentCell.RowIndex].Value;
-                id = (int)tablaEmpleados[0, tablaEmpleados.CurrentCell.RowIndex].Value;
                 //if (clickEmpleado)
                 {
                     //OBTIENE LOS DATOS DEL EMPLEADO CON CONSULTAS, UTILZANDO LA FUNCION QUERYTOSTRING
@@ -302,7 +278,7 @@ namespace PruebaA
             catch (NullReferenceException ex)
             {
                 //System.Windows.Forms.MessageBox.Show("Seleccione un elemento");
-                AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("Seleccione un elemento", 3);
+                AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("Seleccione un elemento", 1);
                 mens.ShowDialog();
             }
         }
@@ -356,25 +332,7 @@ namespace PruebaA
 
 		private void tablaEmpleados_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
-            try
-            {
-                // idOtroForm = (int)tablaEmpleados[0, tablaEmpleados.CurrentCell.RowIndex].Value;
-                id = (int)tablaEmpleados[0, tablaEmpleados.CurrentCell.RowIndex].Value;
-                visualizarSimple();
-            }
-            catch (NullReferenceException)
-            {
-                AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("Seleccione un elemento", 3);
-                mens.ShowDialog();
-            }
-            catch(InvalidCastException)
-            {
-                AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No hay elementos", 3);
-                mens.ShowDialog();
-            }
-            
-
-                   
+            visualizarSimple();
         }
         public void visualizarSimple()
         {
@@ -398,11 +356,7 @@ namespace PruebaA
                 if (ren > 0)
                     dataGridView1.RowCount = ren;
                 else
-                {
                     dataGridView1.RowCount = 1;
-                    dataGridView1[0, 0].Value = "";
-                    dataGridView1[1, 0].Value = "";
-                }
 
                 co.Comando("SELECT t.Nombre, tt.NombreTipoTrab " +
                            "FROM Trabajos as t INNER JOIN Empleado_Trabajos AS et ON(et.TrabajosID = t.ID) " +
@@ -460,16 +414,6 @@ namespace PruebaA
             
             visualizar();
 
-        }
-
-        private void Empleados_SizeChanged(object sender, EventArgs e)
-        {
-            agregarEmpleado.Location = new Point(panel1.Location.X - 43, agregarEmpleado.Location.Y);
-            btnEliminarEmp.Location = new Point(panel1.Location.X - 128, btnEliminarEmp.Location.Y);
-            btnEditar.Location = new Point(panel1.Location.X - 200, btnEditar.Location.Y);
-
-            tablaEmpleados.Location = new Point(40, tablaEmpleados.Location.Y);
-            tablaEmpleados.Width = this.Width - 318;
         }
     }
 }

@@ -29,7 +29,7 @@ namespace AppProyectoBD
             int i = 0;
             int ren = 0;
             //Datos de Tipos de empleado
-            co.Comando("SELECT COUNT(*) FROM TipEmp;");
+            co.Comando("SELECT COUNT(*) FROM TipoEmpleado;");
             if (co.LeerRead)
                 ren = co.Leer.GetInt32(0);
 
@@ -43,7 +43,7 @@ namespace AppProyectoBD
             }
 
             //Datos de tipos de trabajos
-            co.Comando("SELECT * FROM TipEmp;");
+            co.Comando("SELECT ID, NombreTipo FROM TipoEmpleado;");
             while (co.LeerRead)
             {
                 tipoEmpleado[0, i].Value = co.Leer.GetInt32(0);
@@ -175,32 +175,24 @@ namespace AppProyectoBD
 
         private void button3_Click(object sender, EventArgs e)
         {
-            if (co.permiso.Equals(co.administrador))
+            //Se manda llamar el frame correspondiente en modo edicion segun el elemento que se desea editar
+            if (redesSoc)
             {
-                //Se manda llamar el frame correspondiente en modo edicion segun el elemento que se desea editar
-                if (redesSoc)
-                {
-                    AgregarRedesSociales frame = new AgregarRedesSociales(co, ID, true);
-                    frame.ShowDialog();
-                }
-                if (tipoEmp)
-                {
-
-                    AgregarTipoTrabajoEmpleado frame = new AgregarTipoTrabajoEmpleado(co, ID, true, 2);
-                    frame.ShowDialog();
-                }
-                if (tipoTrab)
-                {
-                    AgregarTipoTrabajoEmpleado frame = new AgregarTipoTrabajoEmpleado(co, ID, true, 1);
-                    frame.ShowDialog();
-                }
-                cargarDatos();
+                AgregarRedesSociales frame = new AgregarRedesSociales(co, ID, true);
+                frame.ShowDialog();
             }
-            else
+            if (tipoEmp)
             {
-                AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No cuenta con los permisos para realizar esta acción", 3);
-                mens.ShowDialog();
+                
+                AgregarTipoTrabajoEmpleado frame = new AgregarTipoTrabajoEmpleado(co, ID, true,2);
+                frame.ShowDialog();
             }
+            if (tipoTrab)
+            {
+                AgregarTipoTrabajoEmpleado frame = new AgregarTipoTrabajoEmpleado(co,ID,true,1);
+                frame.ShowDialog();
+            }
+            cargarDatos();
         }
 
         public void reset()
@@ -211,122 +203,74 @@ namespace AppProyectoBD
         }
         private void button4_Click(object sender, EventArgs e)
         {
-            if (co.permiso.Equals(co.administrador))
+            //Se elimina el elemento correspondiente pero antes se hace una confirmacion
+            //NOTA: Solo se elimina en caso de que no este siendo utilizado por ningun otro elemento de la BD
+            int total = 0;
+            if (redesSoc)
             {
-                //Se elimina el elemento correspondiente pero antes se hace una confirmacion
-                //NOTA: Solo se elimina en caso de que no este siendo utilizado por ningun otro elemento de la BD
-                int total = 0;
-                if (redesSoc)
+               co.Comando("SELECT COUNT(*) FROM RedesSociales WHERE TipoDeRedSocialID = "+ID);
+                if (co.LeerRead)
+                    total = co.Leer.GetInt32(0);
+                if(total == 0)
                 {
-                    co.Comando("SELECT COUNT(*) FROM RedesSociales WHERE TipoDeRedSocialID = " + ID);
-                    if (co.LeerRead)
-                        total = co.Leer.GetInt32(0);
-                    if (total == 0)
-                    {
-                        MessageBox mens = new MessageBox("¿Seguro que desea eliminar?", 1);
-                        mens.ShowDialog();
-                        if (aceptar)
-                            co.Comando("DELETE FROM TipoDeRedSocial WHERE ID = " + ID);
+                    MessageBox mens = new MessageBox("¿Seguro que desea eliminar?",1);
+                    mens.ShowDialog();
+                    if (aceptar)
+                        co.Comando("DELETE FROM TipoDeRedSocial WHERE ID = " + ID);
 
-                    }
-                    else
-                    {
-                        MessageBox mens = new MessageBox("Esta siendo utilizado", 2);
-                        mens.ShowDialog();
-                    }
                 }
-                if (tipoTrab)
+                else
                 {
-                    co.Comando("SELECT COUNT(*) FROM Trabajos WHERE TipoTrabajosID = " + ID);
-                    if (co.LeerRead)
-                        total = co.Leer.GetInt32(0);
-                    if (total == 0)
-                    {
-                        MessageBox mens = new MessageBox("¿Seguro que desea eliminar?", 1);
-                        mens.ShowDialog();
-                        if (aceptar)
-                            co.Comando("DELETE FROM TipoTrabajos WHERE ID = " + ID);
-
-                    }
-                    else
-                    {
-                        MessageBox mens = new MessageBox("Esta siendo utilizado", 2);
-                        mens.ShowDialog();
-                    }
-                }
-                if (tipoEmp)
-                {
-                    MessageBox mens = new MessageBox("Los tipos de empleado no se pueden eliminar", 3);
+                    MessageBox mens = new MessageBox("Esta siendo utilizado", 2);
                     mens.ShowDialog();
                 }
-                aceptar = false;
-                reset();
-                cargarDatos();
             }
-            else
+            if (tipoTrab)
             {
-                AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No cuenta con los permisos para realizar esta acción", 3);
+                co.Comando("SELECT COUNT(*) FROM Trabajos WHERE TipoTrabajosID = " + ID);
+                if (co.LeerRead)
+                    total = co.Leer.GetInt32(0);
+                if (total == 0)
+                {
+                    MessageBox mens = new MessageBox("¿Seguro que desea eliminar?", 12);
+                    mens.ShowDialog();
+                    if (aceptar)
+                        co.Comando("DELETE FROM TipoTrabajos WHERE ID = " + ID);
+
+                }
+                else
+                {
+                    MessageBox mens = new MessageBox("Esta siendo utilizado", 2);
+                    mens.ShowDialog();
+                }
+            }
+            if (tipoEmp)
+            {
+                MessageBox mens = new MessageBox("Los tipos de empleado no se pueden eliminar", 1);
                 mens.ShowDialog();
             }
+            aceptar = false;
+            reset();
+            cargarDatos();
         }
 
         //Se manda llamar el frame correspondiente para agregar un nuevo elemento
         //------------------------------------------------------------------------
         private void button1_Click(object sender, EventArgs e)
         {
-            if (co.permiso.Equals(co.administrador))
-            {
-                AgregarTipoTrabajoEmpleado frame = new AgregarTipoTrabajoEmpleado(co, 0, false, 1);
-                frame.ShowDialog();
-            }
-            else
-            {
-                AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No cuenta con los permisos para realizar esta acción", 3);
-                mens.ShowDialog();
-            }
+            
+            AgregarTipoTrabajoEmpleado frame = new AgregarTipoTrabajoEmpleado(co,0,false,1);
+            frame.ShowDialog();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            if (co.permiso.Equals(co.administrador))
-            {
-                AgregarRedesSociales frame = new AgregarRedesSociales(co, 0, false);
-                frame.ShowDialog();
-            }
-            else
-            {
-                AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No cuenta con los permisos para realizar esta acción", 3);
-                mens.ShowDialog();
-            }
+            AgregarRedesSociales frame = new AgregarRedesSociales(co,0,false);
+            frame.ShowDialog();
         }
 
         private void butVisua_Click(object sender, EventArgs e)
         {
-        }
-
-        private void Utilidades_SizeChanged(object sender, EventArgs e)
-        {
-            tipoEmpleado.Location = new Point(Convert.ToInt32(Math.Round(this.Width * .0659)), tipoEmpleado.Location.Y);
-            tipoEmpleado.Width = Convert.ToInt32(Math.Round(this.Width * .38311));
-            label1.Location = new Point(Convert.ToInt32(Math.Round(this.Width * .0659)), label1.Location.Y);
-
-            redesSociales.Location = new Point(Convert.ToInt32(Math.Round(this.Width * .0659)), redesSociales.Location.Y);
-            redesSociales.Width = Convert.ToInt32(Math.Round(this.Width * .38311));
-            label4.Location = new Point(Convert.ToInt32(Math.Round(this.Width * .0659)), label4.Location.Y);
-
-            tipoTrabajo.Location = new Point(redesSociales.Location.X + redesSociales.Width + Convert.ToInt32(Math.Round(this.Width * .09375)), tipoTrabajo.Location.Y);
-            tipoTrabajo.Width = Convert.ToInt32(Math.Round(this.Width * .38311));
-            label2.Location = new Point(redesSociales.Location.X + redesSociales.Width + Convert.ToInt32(Math.Round(this.Width * .09375)), label2.Location.Y);
-
-            panel1.Location = new Point(redesSociales.Location.X + redesSociales.Width + Convert.ToInt32(Math.Round(this.Width * .09375)), panel1.Location.Y);
-            panel1.Width = Convert.ToInt32(Math.Round(this.Width * .2754));
-
-            button2.Location = new Point(redesSociales.Location.X + redesSociales.Width - 78, button2.Location.Y);
-            button1.Location = new Point(tipoTrabajo.Location.X + tipoTrabajo.Width - 78, button1.Location.Y);
-            button3.Location = new Point(tipoTrabajo.Location.X + tipoTrabajo.Width - 78, button3.Location.Y);
-            button4.Location = new Point(tipoTrabajo.Location.X + tipoTrabajo.Width - 78, button4.Location.Y);
-
-            richTextBox1.Width = panel1.Width;
         }
         //------------------------------------------------------------------------
     }

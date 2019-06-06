@@ -9,7 +9,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
-using AppProyectoBD;
 
 namespace PruebaA
 {
@@ -22,9 +21,7 @@ namespace PruebaA
 		public worker_project_registry(Empleados f)
 		{
 			InitializeComponent();
-            Region = Funciones.redondear(Width, Height);
-
-            this.f = f;
+			this.f = f;
 			this.CenterToParent();
 		}
 
