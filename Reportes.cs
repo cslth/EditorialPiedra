@@ -80,9 +80,15 @@ namespace AppProyectoBD
                 guardar.Title = "Guardar archivo";
                 guardar.Filter = "Documento de word|*.docx";
                 guardar.ShowDialog();
+                // ---------------------------------------------------------------
                 string nombreArchivo = guardar.FileName;
-                //string nombreArchivo = "ArchivoPrueba";
-
+                string nombreProvisional = nombreArchivo;
+                string [] arregloProvisional = nombreProvisional.Split(System.IO.Path.DirectorySeparatorChar);
+                arregloProvisional[arregloProvisional.Length - 1] = arregloProvisional[arregloProvisional.Length - 1].Replace(" ", "_");
+                nombreArchivo = "";
+                for (int i = 0; i < arregloProvisional.Length; i++)
+                    nombreArchivo = nombreArchivo + arregloProvisional[i] + (i == arregloProvisional.Length - 1 ? "" : System.IO.Path.DirectorySeparatorChar.ToString());
+                // ---------------------------------------------------------------
                 var doc = DocX.Create(nombreArchivo);
 
                 // Se crea el formato para los títulos
@@ -810,11 +816,6 @@ namespace AppProyectoBD
             }
         }
 
-        private void checkBox26_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void groupBox1_Enter(object sender, EventArgs e)
         {
 
@@ -825,6 +826,8 @@ namespace AppProyectoBD
             if (arreglos() == 0)
             {
                 // Agregar mensaje de "no se seleccionó nignuna opcion"
+                MessageBox mens = new MessageBox("No se ha seleccion ninguna opción", 2);
+                mens.ShowDialog();
                 return;
             }
             fechas();

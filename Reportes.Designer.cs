@@ -32,19 +32,16 @@
             this.fecha1 = new System.Windows.Forms.DateTimePicker();
             this.fecha2 = new System.Windows.Forms.DateTimePicker();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.checkBoxt1 = new System.Windows.Forms.CheckBox();
             this.checkBox7 = new System.Windows.Forms.CheckBox();
             this.checkBox4 = new System.Windows.Forms.CheckBox();
             this.checkBox3 = new System.Windows.Forms.CheckBox();
             this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.checkBoxt2 = new System.Windows.Forms.CheckBox();
             this.checkBox8 = new System.Windows.Forms.CheckBox();
             this.checkBox14 = new System.Windows.Forms.CheckBox();
             this.checkBox15 = new System.Windows.Forms.CheckBox();
             this.checkBox16 = new System.Windows.Forms.CheckBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.checkBoxt3 = new System.Windows.Forms.CheckBox();
             this.checkBox9 = new System.Windows.Forms.CheckBox();
             this.checkBox5 = new System.Windows.Forms.CheckBox();
             this.checkBox13 = new System.Windows.Forms.CheckBox();
@@ -52,7 +49,6 @@
             this.checkBox18 = new System.Windows.Forms.CheckBox();
             this.checkBox19 = new System.Windows.Forms.CheckBox();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
-            this.checkBoxt4 = new System.Windows.Forms.CheckBox();
             this.checkBox10 = new System.Windows.Forms.CheckBox();
             this.checkBox6 = new System.Windows.Forms.CheckBox();
             this.checkBox24 = new System.Windows.Forms.CheckBox();
@@ -63,6 +59,10 @@
             this.Cancelar = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
+            this.checkBoxt1 = new System.Windows.Forms.CheckBox();
+            this.checkBoxt2 = new System.Windows.Forms.CheckBox();
+            this.checkBoxt3 = new System.Windows.Forms.CheckBox();
+            this.checkBoxt4 = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -117,18 +117,6 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Pagos programados pendientes";
             this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
-            // 
-            // checkBoxt1
-            // 
-            this.checkBoxt1.AutoSize = true;
-            this.checkBoxt1.Font = new System.Drawing.Font("Gothic A1", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxt1.Location = new System.Drawing.Point(281, 191);
-            this.checkBoxt1.Name = "checkBoxt1";
-            this.checkBoxt1.Size = new System.Drawing.Size(72, 31);
-            this.checkBoxt1.TabIndex = 6;
-            this.checkBoxt1.Text = "Todo";
-            this.checkBoxt1.UseVisualStyleBackColor = true;
-            this.checkBoxt1.CheckStateChanged += new System.EventHandler(this.checkBoxt1_CheckStateChanged);
             // 
             // checkBox7
             // 
@@ -188,18 +176,6 @@
             this.groupBox3.TabIndex = 5;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Pagos programados completados";
-            // 
-            // checkBoxt2
-            // 
-            this.checkBoxt2.AutoSize = true;
-            this.checkBoxt2.Font = new System.Drawing.Font("Gothic A1", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxt2.Location = new System.Drawing.Point(295, 148);
-            this.checkBoxt2.Name = "checkBoxt2";
-            this.checkBoxt2.Size = new System.Drawing.Size(72, 31);
-            this.checkBoxt2.TabIndex = 7;
-            this.checkBoxt2.Text = "Todo";
-            this.checkBoxt2.UseVisualStyleBackColor = true;
-            this.checkBoxt2.CheckStateChanged += new System.EventHandler(this.checkBoxt2_CheckStateChanged);
             // 
             // checkBox8
             // 
@@ -263,18 +239,6 @@
             this.groupBox4.TabIndex = 5;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Pagos realizados";
-            // 
-            // checkBoxt3
-            // 
-            this.checkBoxt3.AutoSize = true;
-            this.checkBoxt3.Font = new System.Drawing.Font("Gothic A1", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxt3.Location = new System.Drawing.Point(281, 229);
-            this.checkBoxt3.Name = "checkBoxt3";
-            this.checkBoxt3.Size = new System.Drawing.Size(72, 31);
-            this.checkBoxt3.TabIndex = 7;
-            this.checkBoxt3.Text = "Todo";
-            this.checkBoxt3.UseVisualStyleBackColor = true;
-            this.checkBoxt3.CheckStateChanged += new System.EventHandler(this.checkBoxt3_CheckStateChanged);
             // 
             // checkBox9
             // 
@@ -361,18 +325,6 @@
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Gastos realizados";
             // 
-            // checkBoxt4
-            // 
-            this.checkBoxt4.AutoSize = true;
-            this.checkBoxt4.Font = new System.Drawing.Font("Gothic A1", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxt4.Location = new System.Drawing.Point(295, 229);
-            this.checkBoxt4.Name = "checkBoxt4";
-            this.checkBoxt4.Size = new System.Drawing.Size(72, 31);
-            this.checkBoxt4.TabIndex = 7;
-            this.checkBoxt4.Text = "Todo";
-            this.checkBoxt4.UseVisualStyleBackColor = true;
-            this.checkBoxt4.CheckStateChanged += new System.EventHandler(this.checkBoxt4_CheckStateChanged);
-            // 
             // checkBox10
             // 
             this.checkBox10.AutoSize = true;
@@ -425,9 +377,8 @@
             this.checkBox26.Name = "checkBox26";
             this.checkBox26.Size = new System.Drawing.Size(94, 31);
             this.checkBox26.TabIndex = 1;
-            this.checkBox26.Text = "Método";
+            this.checkBox26.Text = "Metodo";
             this.checkBox26.UseVisualStyleBackColor = true;
-            this.checkBox26.CheckedChanged += new System.EventHandler(this.checkBox26_CheckedChanged);
             // 
             // checkBox27
             // 
@@ -491,6 +442,54 @@
             this.label1.Text = "REPORTES";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.label1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.label1_MouseDown);
+            // 
+            // checkBoxt1
+            // 
+            this.checkBoxt1.AutoSize = true;
+            this.checkBoxt1.Font = new System.Drawing.Font("Gothic A1", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBoxt1.Location = new System.Drawing.Point(281, 191);
+            this.checkBoxt1.Name = "checkBoxt1";
+            this.checkBoxt1.Size = new System.Drawing.Size(72, 31);
+            this.checkBoxt1.TabIndex = 6;
+            this.checkBoxt1.Text = "Todo";
+            this.checkBoxt1.UseVisualStyleBackColor = true;
+            this.checkBoxt1.CheckStateChanged += new System.EventHandler(this.checkBoxt1_CheckStateChanged);
+            // 
+            // checkBoxt2
+            // 
+            this.checkBoxt2.AutoSize = true;
+            this.checkBoxt2.Font = new System.Drawing.Font("Gothic A1", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBoxt2.Location = new System.Drawing.Point(295, 148);
+            this.checkBoxt2.Name = "checkBoxt2";
+            this.checkBoxt2.Size = new System.Drawing.Size(72, 31);
+            this.checkBoxt2.TabIndex = 7;
+            this.checkBoxt2.Text = "Todo";
+            this.checkBoxt2.UseVisualStyleBackColor = true;
+            this.checkBoxt2.CheckStateChanged += new System.EventHandler(this.checkBoxt2_CheckStateChanged);
+            // 
+            // checkBoxt3
+            // 
+            this.checkBoxt3.AutoSize = true;
+            this.checkBoxt3.Font = new System.Drawing.Font("Gothic A1", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBoxt3.Location = new System.Drawing.Point(281, 229);
+            this.checkBoxt3.Name = "checkBoxt3";
+            this.checkBoxt3.Size = new System.Drawing.Size(72, 31);
+            this.checkBoxt3.TabIndex = 7;
+            this.checkBoxt3.Text = "Todo";
+            this.checkBoxt3.UseVisualStyleBackColor = true;
+            this.checkBoxt3.CheckStateChanged += new System.EventHandler(this.checkBoxt3_CheckStateChanged);
+            // 
+            // checkBoxt4
+            // 
+            this.checkBoxt4.AutoSize = true;
+            this.checkBoxt4.Font = new System.Drawing.Font("Gothic A1", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBoxt4.Location = new System.Drawing.Point(295, 229);
+            this.checkBoxt4.Name = "checkBoxt4";
+            this.checkBoxt4.Size = new System.Drawing.Size(72, 31);
+            this.checkBoxt4.TabIndex = 7;
+            this.checkBoxt4.Text = "Todo";
+            this.checkBoxt4.UseVisualStyleBackColor = true;
+            this.checkBoxt4.CheckStateChanged += new System.EventHandler(this.checkBoxt4_CheckStateChanged);
             // 
             // Reportes
             // 
